@@ -17,12 +17,8 @@ namespace EngineSimulacao.ExemploPosto
 
             agendador.CriarRecurso("funcionarios", new Recurso(1, "Funcionários", 3));
             agendador.AgendarAgora(new ChegadaCarros(""));
-            agendador.AgendarAgora(new ChegadaCarros(""));
-            agendador.AgendarAgora(new ChegadaCarros(""));
-            agendador.AgendarAgora(new ChegadaCarros(""));
 
-            while(true)
-                agendador.SimularUmaExecucao();
+            agendador.Simular();
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EngineSimulacao.Api
 {
@@ -8,29 +7,43 @@ namespace EngineSimulacao.Api
         /// <summary>
         /// FEL - Future Event List
         /// </summary>
-        private readonly List<Evento> _listaEventosFuturos = new();
+        private readonly PriorityQueue<Evento, int> _listaEventosFuturos = new();
 
         private readonly Dictionary<string, Recurso> _recursos = new();
 
-        public int Tempo { get; }
+        public int Tempo { get; private set; }
         public IMotorExecucao MotorExecucao { get; set; }
-        
+
         public void SimularUmaExecucao()
         {
-            var evento = _listaEventosFuturos.First();
-            _listaEventosFuturos.RemoveAt(0);
+            _listaEventosFuturos.TryDequeue(out var evento, out var prioridade);
 
+            Tempo = prioridade;
             MotorExecucao.Executar(evento);
+        }
+
+        public void Simular()
+        {
+            while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
+            {
+                Tempo = prioridade;
+                MotorExecucao.Executar(evento);
+            }
         }
 
         public void AgendarAgora(Evento evento)
         {
-            _listaEventosFuturos.Insert(0, evento);
+            _listaEventosFuturos.Enqueue(evento, Tempo);
         }
 
-        public void AgendarNoFinal(Evento evento)
+        public void AgendarEm(Evento evento, int tempoAdicionar)
         {
-            _listaEventosFuturos.Add(evento);
+            _listaEventosFuturos.Enqueue(evento, Tempo + tempoAdicionar);
+        }
+
+        public void AgendarComTempoAbsoluto(Evento evento, int tempoAbsoluto)
+        {
+            _listaEventosFuturos.Enqueue(evento, tempoAbsoluto);
         }
 
         public void CriarRecurso(string chave, Recurso recurso)

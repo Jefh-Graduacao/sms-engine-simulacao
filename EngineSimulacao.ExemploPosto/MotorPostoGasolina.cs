@@ -3,7 +3,6 @@ using EngineSimulacao.Api;
 using EngineSimulacao.ExemploPosto.Eventos;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization.Formatters;
 
 namespace EngineSimulacao.ExemploPosto
 {
@@ -12,7 +11,7 @@ namespace EngineSimulacao.ExemploPosto
         private readonly Queue<object> _filaAtendimento = new();
 
         public Agendador Agendador { get; set; }
-        
+
         public void Executar(Evento evento)
         {
             var args = evento.Argumentos.Split("-");
@@ -34,7 +33,6 @@ namespace EngineSimulacao.ExemploPosto
 
             if (funcionarios.VerificarDisponibilidade(1))
             {
-                // todo:
                 Agendador.AgendarAgora(new IniciarServico(""));
             }
             else
@@ -42,7 +40,10 @@ namespace EngineSimulacao.ExemploPosto
                 _filaAtendimento.Enqueue(carro);
             }
 
-            // todo: finalizar 
+            if (Agendador.Tempo < 100)
+            {
+                Agendador.AgendarEm(new ChegadaCarros(""), 5);
+            }
 
             return true;
         }
@@ -52,8 +53,7 @@ namespace EngineSimulacao.ExemploPosto
             var recurso = Agendador.ObterRecurso("funcionarios");
             recurso.TentarAlocar(1);
 
-            Agendador.AgendarNoFinal(new FinalizarServico(""));
-            //Todo: 12 segundos
+            Agendador.AgendarEm(new FinalizarServico(""), 12);
 
             return true;
         }

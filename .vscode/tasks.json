@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/EngineSimulacao.Api/EngineSimulacao.Api.csproj",
+                "${workspaceFolder}/EngineSimulacao.ExemploPosto/EngineSimulacao.ExemploPosto.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/EngineSimulacao.Api/EngineSimulacao.Api.csproj",
+                "${workspaceFolder}/EngineSimulacao.ExemploPosto/EngineSimulacao.ExemploPosto.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/EngineSimulacao.Api/EngineSimulacao.Api.csproj",
+                "${workspaceFolder}/EngineSimulacao.ExemploPosto/EngineSimulacao.ExemploPosto.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
