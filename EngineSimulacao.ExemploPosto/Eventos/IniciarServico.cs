@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using EngineSimulacao.Api;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class IniciarServico : Evento
     {
-        public IniciarServico(string argumentos) : base(argumentos)
+        public IniciarServico() : base() { }
+
+        public IniciarServico(Dictionary<string, object> parametros) : base(parametros)
         {
         }
     }

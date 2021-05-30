@@ -11,6 +11,8 @@ namespace EngineSimulacao.Api
 
         private readonly Dictionary<string, Recurso> _recursos = new();
 
+        private readonly List<Entidade> _entidades = new();
+
         public int Tempo { get; private set; }
         public IMotorExecucao MotorExecucao { get; set; }
 
@@ -53,5 +55,21 @@ namespace EngineSimulacao.Api
         }
 
         public Recurso ObterRecurso(string chave) => _recursos[chave];
+
+        public int CriarEntidade(string nome)
+        {
+            _entidades.Add(new Entidade
+            {
+                Nome = nome,
+                TempoCriacao = Tempo
+            });
+
+            return _entidades.Count - 1;
+        }
+
+        public void DestruirEntidade(int id)
+        {
+            _entidades[id].TempoDestruicao = Tempo;
+        }
     }
 }

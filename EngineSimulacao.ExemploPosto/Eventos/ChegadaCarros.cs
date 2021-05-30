@@ -1,10 +1,13 @@
-﻿using EngineSimulacao.Api;
+﻿using System.Collections.Generic;
+using EngineSimulacao.Api;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class ChegadaCarros : Evento
     {
-        public ChegadaCarros(string argumentos) : base(argumentos)
+        public ChegadaCarros() : base() { }
+
+        public ChegadaCarros(Dictionary<string, object> parametros) : base(parametros)
         {
         }
     }

@@ -8,65 +8,71 @@ namespace EngineSimulacao.ExemploPosto
 {
     public sealed class MotorPostoGasolina : IMotorExecucao
     {
-        private readonly Queue<object> _filaAtendimento = new();
+        private readonly Queue<int> _filaAtendimento = new();
 
         public Agendador Agendador { get; set; }
 
         public void Executar(Evento evento)
         {
-            var args = evento.Argumentos.Split("-");
-
             var r = evento switch
             {
-                ChegadaCarros _ => FnChegadaCarros(args[1..]),
-                IniciarServico _ => FnIniciarServico(args[1..]),
-                FinalizarServico _ => FnFinalizarServico(args[1..]),
+                ChegadaCarros _ => FnChegadaCarros(evento.Parametros),
+                IniciarServico _ => FnIniciarServico(evento.Parametros),
+                FinalizarServico _ => FnFinalizarServico(evento.Parametros),
                 _ => throw new Exception("")
             };
         }
 
-        public bool FnChegadaCarros(params string[] args)
+        public bool FnChegadaCarros(Dictionary<string, object> parametros)
         {
-            var carro = new object();
+            var idCarro = Agendador.CriarEntidade("Carro");
 
             var funcionarios = Agendador.ObterRecurso("funcionarios");
 
             if (funcionarios.VerificarDisponibilidade(1))
             {
-                Agendador.AgendarAgora(new IniciarServico(""));
+                var evento = new IniciarServico(new Dictionary<string, object>
+                {
+                    ["idCarro"] = idCarro
+                });
             }
             else
             {
-                _filaAtendimento.Enqueue(carro);
+                _filaAtendimento.Enqueue(idCarro);
             }
 
             if (Agendador.Tempo < 100)
             {
-                Agendador.AgendarEm(new ChegadaCarros(""), 5);
+                Agendador.AgendarEm(new ChegadaCarros(), 5);
             }
 
             return true;
         }
 
-        public bool FnIniciarServico(params string[] args)
+        public bool FnIniciarServico(Dictionary<string, object> parametros)
         {
             var recurso = Agendador.ObterRecurso("funcionarios");
             recurso.TentarAlocar(1);
 
-            Agendador.AgendarEm(new FinalizarServico(""), 12);
+            Agendador.AgendarEm(new FinalizarServico(parametros), 12);
 
             return true;
         }
 
-        public bool FnFinalizarServico(params string[] args)
+        public bool FnFinalizarServico(Dictionary<string, object> parametros)
         {
+            var idCarro = Convert.ToInt32(parametros["idCarro"]);
+            Agendador.DestruirEntidade(idCarro);
+
             var recurso = Agendador.ObterRecurso("funcionarios");
             recurso.Liberar(1);
 
             if (_filaAtendimento.Any())
             {
-                _filaAtendimento.Dequeue();
-                Agendador.AgendarAgora(new IniciarServico(""));
+                Agendador.AgendarAgora(new IniciarServico(new Dictionary<string, object>
+                {
+                    ["idCarro"] = _filaAtendimento.Dequeue()
+                }));
             }
 
             return true;
