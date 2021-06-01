@@ -1,27 +1,27 @@
+using System;
 using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public class Agendador
+    public class Agendador<Memoria> where Memoria:new()
     {
         /// <summary>
         /// FEL - Future Event List
         /// </summary>
-        private readonly PriorityQueue<Evento, int> _listaEventosFuturos = new();
+        private readonly PriorityQueue<Evento<Memoria>, int> _listaEventosFuturos = new();
 
         private readonly Dictionary<string, Recurso> _recursos = new();
 
         private readonly List<Entidade> _entidades = new();
 
         public int Tempo { get; private set; }
-        public IMotorExecucao MotorExecucao { get; set; }
 
         public void SimularUmaExecucao()
         {
             _listaEventosFuturos.TryDequeue(out var evento, out var prioridade);
 
             Tempo = prioridade;
-            MotorExecucao.Executar(evento);
+            evento.Executar();
         }
 
         public void Simular()
@@ -29,24 +29,19 @@ namespace EngineSimulacao.Api
             while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
             {
                 Tempo = prioridade;
-                MotorExecucao.Executar(evento);
+                evento.Executar();
             }
         }
-
-        public void AgendarAgora(Evento evento)
-        {
-            _listaEventosFuturos.Enqueue(evento, Tempo);
+        
+        private void AgendarEvento(Evento<Memoria> evento, int tempoSelecionado){
+            _listaEventosFuturos.Enqueue(evento, tempoSelecionado);
         }
 
-        public void AgendarEm(Evento evento, int tempoAdicionar)
-        {
-            _listaEventosFuturos.Enqueue(evento, Tempo + tempoAdicionar);
-        }
+        public void AgendarAgora(Evento<Memoria> evento) { this.AgendarEvento(evento, Tempo); }
 
-        public void AgendarComTempoAbsoluto(Evento evento, int tempoAbsoluto)
-        {
-            _listaEventosFuturos.Enqueue(evento, tempoAbsoluto);
-        }
+        public void AgendarEm(Evento<Memoria> evento, int tempoAdicionar) { this.AgendarEvento(evento, Tempo + tempoAdicionar); }
+
+        public void AgendarComTempoAbsoluto(Evento<Memoria> evento, int tempoAbsoluto) { this.AgendarEvento(evento, tempoAbsoluto); }
 
         public void CriarRecurso(string chave, Recurso recurso)
         {

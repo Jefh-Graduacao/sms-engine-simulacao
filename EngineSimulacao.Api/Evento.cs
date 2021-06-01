@@ -2,17 +2,24 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public abstract class Evento
+    public abstract class ParametrosEvento {}
+    public abstract class Evento<Memoria> where Memoria:new()
     {
         public int Id { get; set; }
         public int Tempo { get; set; }
-        public Dictionary<string, object> Parametros = new();
+        protected MotorExecucao<Memoria> motor { get; set; }
+        protected ParametrosEvento Parametros;
 
-        protected Evento() { }
-
-        protected Evento(Dictionary<string, object> parametros)
-        {
-            Parametros = parametros;
+        protected Evento(MotorExecucao<Memoria> motor) {
+            this.motor = motor;
         }
+
+        protected Evento(MotorExecucao<Memoria> motor, ParametrosEvento parametros)
+        {
+            this.motor = motor;
+            this.Parametros = parametros;
+        }
+
+        public abstract void Executar();
     }
 }
