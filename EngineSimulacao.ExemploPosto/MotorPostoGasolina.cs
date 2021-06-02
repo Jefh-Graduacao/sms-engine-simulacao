@@ -12,7 +12,7 @@ namespace EngineSimulacao.ExemploPosto
     public sealed class MotorPostoGasolina : MotorExecucao<MemoriaPostoGasolina>
     {
         public MotorPostoGasolina() {
-            this.Agendador = new Agendador<MemoriaPostoGasolina>();
+            this.Agendador = new Agendador();
         }
     }
 }

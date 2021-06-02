@@ -4,29 +4,32 @@ using EngineSimulacao.Api;
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class ParametrosChegadaCarros {} 
-    public sealed class ChegadaCarros : Evento<MemoriaPostoGasolina>
+    public sealed class ChegadaCarros : IEvento
     {
-        public ChegadaCarros(MotorExecucao<MemoriaPostoGasolina> Motor) : base(Motor) { }
+        private MotorPostoGasolina motorPostoGasolina;
+        public ChegadaCarros(MotorPostoGasolina Motor) {
+            this.motorPostoGasolina = Motor;
+         }
 
-        public override void Executar() {
-            var idCarro = this.motor.Agendador.CriarEntidade("Carro");
+        public void Executar() {
+            var idCarro = this.motorPostoGasolina.Agendador.CriarEntidade("Carro");
 
-            var funcionarios = this.motor.Agendador.ObterRecurso("funcionarios");
+            var funcionarios = this.motorPostoGasolina.Agendador.ObterRecurso("funcionarios");
 
             if (funcionarios.VerificarDisponibilidade(1))
             {
-                var evt = this.motor.CriarEvento<IniciarServico>(new ParametrosIniciarServico(idCarro));
-                this.motor.Agendador.AgendarAgora(evt);
+                var evt = new IniciarServico(this.motorPostoGasolina, idCarro);
+                this.motorPostoGasolina.Agendador.AgendarAgora(evt);
             }
             else
             {
-                this.motor.memoria.filaAtendimento.Enqueue(idCarro);
+                this.motorPostoGasolina.memoria.filaAtendimento.Enqueue(idCarro);
             }
 
-            if (this.motor.Agendador.Tempo < 100)
+            if (this.motorPostoGasolina.Agendador.Tempo < 100)
             {
-                var evt = this.motor.CriarEvento<ChegadaCarros>();
-                this.motor.Agendador.AgendarEm(evt, 2);
+                var evt = new ChegadaCarros(this.motorPostoGasolina);
+                this.motorPostoGasolina.Agendador.AgendarEm(evt, 2);
             }
         }
     }

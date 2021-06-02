@@ -9,7 +9,7 @@ namespace EngineSimulacao.ExemploPosto
         {
             var motor = new MotorPostoGasolina();
             motor.Agendador.CriarRecurso("funcionarios", new Recurso(1, "Funcionários", 3));
-            var evtInicial = motor.CriarEvento<ChegadaCarros>();
+            var evtInicial = new ChegadaCarros(motor);
             motor.Agendador.AgendarAgora(evtInicial);
             motor.Agendador.Simular();
         }
