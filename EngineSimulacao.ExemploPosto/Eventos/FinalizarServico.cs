@@ -4,26 +4,23 @@ using System;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class FinalizarServico : IEvento
+    public sealed class FinalizarServico : Evento<MemoriaPostoGasolina>
     {
-        private MotorPostoGasolina motorPostoGasolina;
         private int idCarro;
-        public FinalizarServico(MotorPostoGasolina Motor, int idCarro){
-            this.motorPostoGasolina = Motor;
-            this.idCarro = idCarro;
-        }
+        public FinalizarServico(MotorExecucao<MemoriaPostoGasolina> motor): base(motor){ }
+        public void setParams(int idCarro){ this.idCarro = idCarro; }
+        public override void Executar() {
+            this.motor.Agendador.DestruirEntidade(this.idCarro);
 
-        public void Executar() {
-            this.motorPostoGasolina.Agendador.DestruirEntidade(this.idCarro);
-
-            var recurso = this.motorPostoGasolina.Agendador.ObterRecurso("funcionarios");
+            var recurso = this.motor.Agendador.ObterRecurso("funcionarios");
             recurso.Liberar(1);
 
-            if (this.motorPostoGasolina.memoria.filaAtendimento.Count > 0)
+            if (this.motor.memoria.filaAtendimento.Count > 0)
             {
-                int idCarroFila = this.motorPostoGasolina.memoria.filaAtendimento.Dequeue();
-                var evt = new IniciarServico(this.motorPostoGasolina, idCarroFila);
-                this.motorPostoGasolina.Agendador.AgendarAgora(evt);
+                int idCarroFila = this.motor.memoria.filaAtendimento.Dequeue();
+                var evtIniciar = this.motor.criarEvento<IniciarServico>();
+                evtIniciar.setParams(idCarroFila);
+                this.motor.Agendador.AgendarAgora(evtIniciar);
             }
         }
     }

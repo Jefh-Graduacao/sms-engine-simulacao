@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public class Agendador
+    public class Agendador<Memoria> where Memoria:new()
     {
         /// <summary>
         /// FEL - Future Event List
         /// </summary>
-        private readonly PriorityQueue<IEvento, int> _listaEventosFuturos = new();
+        private readonly PriorityQueue<Evento<Memoria>, int> _listaEventosFuturos = new();
         private readonly Dictionary<string, Recurso> _recursos = new();
         private readonly List<Entidade> _entidades = new();
 
@@ -33,15 +33,15 @@ namespace EngineSimulacao.Api
             }
         }
         
-        private void AgendarEvento(IEvento evento, int tempoSelecionado){
+        private void AgendarEvento(Evento<Memoria> evento, int tempoSelecionado){
             _listaEventosFuturos.Enqueue(evento, tempoSelecionado);
         }
 
-        public void AgendarAgora(IEvento evento) { this.AgendarEvento(evento, Tempo); }
+        public void AgendarAgora(Evento<Memoria> evento) { this.AgendarEvento(evento, Tempo); }
 
-        public void AgendarEm(IEvento evento, int tempoAdicionar) { this.AgendarEvento(evento, Tempo + tempoAdicionar); }
+        public void AgendarEm(Evento<Memoria> evento, int tempoAdicionar) { this.AgendarEvento(evento, Tempo + tempoAdicionar); }
 
-        public void AgendarComTempoAbsoluto(IEvento evento, int tempoAbsoluto) { this.AgendarEvento(evento, tempoAbsoluto); }
+        public void AgendarComTempoAbsoluto(Evento<Memoria> evento, int tempoAbsoluto) { this.AgendarEvento(evento, tempoAbsoluto); }
 
         public void CriarRecurso(string chave, Recurso recurso)
         {
