@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
@@ -9,37 +10,25 @@ namespace EngineSimulacao.Api
         PRIORITY,
         NONE
     }
-    public class InfoEntidade
-    {
-        public bool NoConjunto;
-        public int TempoEntrada;
-        public int TempoSaida;
-        public int Prioridade;
-        public Entidade Entidade;
-
-        public InfoEntidade(Entidade Entidade, int TempoEntrada){
-            this.Entidade = Entidade;
-            this.TempoEntrada = TempoEntrada;
-            this.Prioridade = -1;
-        }
-        public InfoEntidade(Entidade Entidade, int TempoEntrada, int Prioridade){
-            this.Entidade = Entidade;
-            this.TempoEntrada = TempoEntrada;
-            this.Prioridade = Prioridade;
-        }
-    }
-
-    public class ConjuntoEntidade
+    public class ConjuntoEntidade<EnumConjuntos> where EnumConjuntos:struct, Enum
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public Mode Modo { get; set; }
-        public int TamanhoMaximo { get; set; }
+        public Mode Modo { get; set; } = Mode.FIFO;
+        public int TamanhoMaximo { get; set; } = Int32.MaxValue;
+        public int TamanhoAtual => this.entidadesAtuais.Count;
+        private readonly MotorExecucao<EnumConjuntos> motorExecucao;
+        private List<InfoEntidade> historicoEntidades = new();
+        private List<Entidade> entidadesAtuais = new();
 
-        private List<InfoEntidade> historicoEntidades;
-        private List<Entidade> entidadesAtuais;
+        public ConjuntoEntidade(MotorExecucao<EnumConjuntos> motorExecucao){
+            this.motorExecucao = motorExecucao;
+        }
 
-        public void Adicionar(Entidade entidade, int tempo){
+        public bool Adicionar(Entidade entidade){
+            if(TamanhoAtual == TamanhoMaximo) return false;
+
+            var tempo = motorExecucao.Agendador.Tempo;
             var infoEntidade = new InfoEntidade(entidade, tempo);
             this.historicoEntidades.Add(infoEntidade);
             switch(this.Modo){
@@ -50,8 +39,9 @@ namespace EngineSimulacao.Api
                     this.LIFOAdicionar(entidade);
                     break;
             }
+            return false;
         }
-        public void Remover(int tempo) {
+        public Entidade Remover() {
             Entidade entidade;
             switch(this.Modo){
                 case Mode.FIFO:
@@ -61,11 +51,13 @@ namespace EngineSimulacao.Api
                     entidade = this.LIFORemover();
                     break;
                 default:
-                    entidade = new Entidade();
+                    entidade = new Entidade(-1);
                     break;
             }
-            InfoEntidade infoEntidadeRemovida = this.historicoEntidades.Find(info=>info.Entidade.Equals(entidade));
-            infoEntidadeRemovida.TempoSaida = tempo;
+            InfoEntidade infoEntidadeRemovida = this.historicoEntidades.Find(info=>info.Entidade.Id == entidade.Id);
+            infoEntidadeRemovida.TempoSaida = motorExecucao.Agendador.Tempo;
+            infoEntidadeRemovida.NoConjunto = false;
+            return entidade;
         }
         private void LIFOAdicionar(Entidade entidade){
             Stack<Entidade> pilha = new Stack<Entidade>(this.entidadesAtuais);

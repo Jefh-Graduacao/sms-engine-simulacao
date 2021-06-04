@@ -1,4 +1,5 @@
-﻿using EngineSimulacao.Api;
+﻿using System;
+using EngineSimulacao.Api;
 using EngineSimulacao.ExemploPosto.Eventos;
 
 namespace EngineSimulacao.ExemploPosto
@@ -7,8 +8,8 @@ namespace EngineSimulacao.ExemploPosto
     {
         public static void Main(string[] args)
         {
-            var motor = new MotorExecucao<MemoriaPostoGasolina>();
-            motor.Agendador.CriarRecurso("funcionarios", new Recurso(1, "Funcionários", 3));
+            var motor = new MotorExecucao<ConjuntosPosto>();
+            motor.Agendador.CriarRecurso("funcionarios", new Recurso(1, "Funcionários", CONFIG.TOTAL_FUNCIONARIOS));
             var evtIniciar = motor.criarEvento<ChegadaCarros>();
             motor.Agendador.AgendarAgora(evtIniciar);
             motor.Agendador.Simular();

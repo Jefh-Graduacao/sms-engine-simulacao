@@ -1,16 +1,30 @@
 ﻿using System;
-
+using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {   
-    public class MotorExecucao<Memoria> where Memoria:new()
+    public class MotorExecucao<EnumConjuntos> where EnumConjuntos:struct, Enum
     {
-        public Memoria memoria = new Memoria();
-        public Agendador<Memoria> Agendador = new Agendador<Memoria>();
-        public MotorExecucao() {}
-        public E criarEvento<E>() where E:Evento<Memoria>
+        private readonly Dictionary<EnumConjuntos, ConjuntoEntidade<EnumConjuntos>> conjuntos = new();
+        public readonly Agendador<EnumConjuntos> Agendador = new Agendador<EnumConjuntos>();
+        public MotorExecucao() {
+            this.instanciarConjuntos();
+        }
+        public E criarEvento<E>() where E:Evento<EnumConjuntos>
         {
             return (E)Activator.CreateInstance(typeof(E), this);
+        }
+        public ConjuntoEntidade<EnumConjuntos> PegarConjunto(EnumConjuntos nomeConjunto) {
+            this.conjuntos.TryGetValue(nomeConjunto, out var conjunto);
+            return conjunto;
+        }
+
+        private void instanciarConjuntos(){
+            foreach (string stringNome in Enum.GetNames(typeof(EnumConjuntos)))
+            {
+                var nomeConjunto = Enum.Parse<EnumConjuntos>(stringNome);
+                this.conjuntos.Add(nomeConjunto, new ConjuntoEntidade<EnumConjuntos>(this));
+            }
         }
     }
 }

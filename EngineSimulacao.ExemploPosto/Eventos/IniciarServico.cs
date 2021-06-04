@@ -3,19 +3,24 @@ using EngineSimulacao.Api;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class IniciarServico : Evento<MemoriaPostoGasolina>
+    public sealed class IniciarServico : Evento<ConjuntosPosto>
     {
-        int idCarro;
-        public IniciarServico(MotorExecucao<MemoriaPostoGasolina> motor): base(motor){ }
-        public void setParams(int idCarro){ this.idCarro = idCarro; }
+        public IniciarServico(MotorExecucao<ConjuntosPosto> motor): base(motor){ }
 
         public override void Executar() {
-            var recurso = this.motor.Agendador.ObterRecurso("funcionarios");
-            recurso.TentarAlocar(1);
+            var filaAtendimento = this.motor.PegarConjunto(ConjuntosPosto.filaAtendimento);
+            var funcionarios = this.motor.Agendador.ObterRecurso("funcionarios");
+            
+            if(false == funcionarios.VerificarDisponibilidade(CONFIG.FUNCIONARIOS_NECESSARIOS))
+                return;
+
+            var carro = filaAtendimento.Remover();
+            
+            funcionarios.TentarAlocar(CONFIG.FUNCIONARIOS_NECESSARIOS);
 
             var evtFinalizar = this.motor.criarEvento<FinalizarServico>();
-            evtFinalizar.setParams(this.idCarro);
-            this.motor.Agendador.AgendarEm(evtFinalizar, 12);
+            evtFinalizar.setParams(carro);
+            this.motor.Agendador.AgendarEm(evtFinalizar, CONFIG.TEMPO_PARA_FINALIZAR);
         }
     }
 }

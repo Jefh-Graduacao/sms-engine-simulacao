@@ -1,9 +1,11 @@
+using System;
+
 namespace EngineSimulacao.Api
 {
-    public abstract class Evento<M> where M:new()
+    public abstract class Evento<EnumConjuntos> where EnumConjuntos:struct, Enum
     {
-        protected readonly MotorExecucao<M> motor;
-        public Evento(MotorExecucao<M> motor){
+        protected readonly MotorExecucao<EnumConjuntos> motor;
+        public Evento(MotorExecucao<EnumConjuntos> motor){
             this.motor = motor;
         }
         public abstract void Executar();

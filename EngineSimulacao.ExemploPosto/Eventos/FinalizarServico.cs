@@ -4,22 +4,22 @@ using System;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class FinalizarServico : Evento<MemoriaPostoGasolina>
+    public sealed class FinalizarServico : Evento<ConjuntosPosto>
     {
-        private int idCarro;
-        public FinalizarServico(MotorExecucao<MemoriaPostoGasolina> motor): base(motor){ }
-        public void setParams(int idCarro){ this.idCarro = idCarro; }
+        private Entidade carro;
+        public FinalizarServico(MotorExecucao<ConjuntosPosto> motor): base(motor){ }
+        public void setParams(Entidade carro){ this.carro = carro; }
         public override void Executar() {
-            this.motor.Agendador.DestruirEntidade(this.idCarro);
+            this.motor.Agendador.DestruirEntidade(carro);
 
-            var recurso = this.motor.Agendador.ObterRecurso("funcionarios");
-            recurso.Liberar(1);
+            var funcionarios = this.motor.Agendador.ObterRecurso("funcionarios");
+            funcionarios.Liberar(CONFIG.FUNCIONARIOS_NECESSARIOS);
 
-            if (this.motor.memoria.filaAtendimento.Count > 0)
+            ConjuntoEntidade<ConjuntosPosto> filaAtendimento = this.motor.PegarConjunto(ConjuntosPosto.filaAtendimento);
+
+            if (filaAtendimento.TamanhoAtual > 0)
             {
-                int idCarroFila = this.motor.memoria.filaAtendimento.Dequeue();
                 var evtIniciar = this.motor.criarEvento<IniciarServico>();
-                evtIniciar.setParams(idCarroFila);
                 this.motor.Agendador.AgendarAgora(evtIniciar);
             }
         }
