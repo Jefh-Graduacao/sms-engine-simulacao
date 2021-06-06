@@ -5,10 +5,24 @@ namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class IniciarServico : Evento
     {
-        public IniciarServico() : base() { }
+        public IniciarServico(){ 
+            Gerenciador<IniciarServico>.nascimento(this);
+        }
 
-        public IniciarServico(Dictionary<string, object> parametros) : base(parametros)
+        protected override void Estrategia() {            
+            if(false == ConjuntoRecurso<Recurso>.VerificarDisponibilidade(MotorPosto.FUNCIONARIOS_NECESSARIOS))
+                return;
+
+            var carro = MotorPosto.filaAtendimento.Remover();
+            
+            var funcionariosAlocados = ConjuntoRecurso<Recurso>.Alocar(MotorPosto.FUNCIONARIOS_NECESSARIOS);
+
+            var evtFinalizar = new FinalizarServico(carro, funcionariosAlocados);
+            Agendador.AgendarEm(evtFinalizar, MotorPosto.TEMPO_PARA_FINALIZAR);
+        }
+        protected override void Destruir()
         {
+            Gerenciador<IniciarServico>.morte(this);
         }
     }
 }

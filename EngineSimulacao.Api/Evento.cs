@@ -1,18 +1,21 @@
-using System.Collections.Generic;
+using System;
 
 namespace EngineSimulacao.Api
 {
-    public abstract class Evento
+    public abstract class Evento:ITemID
     {
-        public int Id { get; set; }
-        public int Tempo { get; set; }
-        public Dictionary<string, object> Parametros = new();
-
-        protected Evento() { }
-
-        protected Evento(Dictionary<string, object> parametros)
-        {
-            Parametros = parametros;
+        public int Id { get; private set; }
+        public Evento(){
+            this.Id = Gerenciador<Evento>.gerarId();
+            Gerenciador<Evento>.nascimento(this);
         }
+        public void Executar()
+        {
+            this.Estrategia();
+            Gerenciador<Evento>.morte(this);
+            this.Destruir();
+        }
+        protected abstract void Estrategia();
+        protected abstract void Destruir();
     }
 }
