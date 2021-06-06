@@ -3,24 +3,28 @@ using EngineSimulacao.Api;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class IniciarServico : Evento<ConjuntosPosto>
+    public sealed class IniciarServico : Evento
     {
-        public IniciarServico(MotorExecucao<ConjuntosPosto> motor): base(motor){ }
+        public IniciarServico(){ 
+            Gerenciador<IniciarServico>.nascimento(this);
+        }
 
-        public override void Executar() {
-            var filaAtendimento = this.motor.PegarConjunto(ConjuntosPosto.filaAtendimento);
-            var funcionarios = this.motor.Agendador.ObterRecurso("funcionarios");
+        protected override void Estrategia() {
+            var funcionarios = Agendador.ObterRecurso("funcionarios");
             
-            if(false == funcionarios.VerificarDisponibilidade(CONFIG.FUNCIONARIOS_NECESSARIOS))
+            if(false == funcionarios.VerificarDisponibilidade(MotorPosto.FUNCIONARIOS_NECESSARIOS))
                 return;
 
-            var carro = filaAtendimento.Remover();
+            var carro = MotorPosto.filaAtendimento.Remover();
             
-            funcionarios.TentarAlocar(CONFIG.FUNCIONARIOS_NECESSARIOS);
+            funcionarios.TentarAlocar(MotorPosto.FUNCIONARIOS_NECESSARIOS);
 
-            var evtFinalizar = this.motor.criarEvento<FinalizarServico>();
-            evtFinalizar.setParams(carro);
-            this.motor.Agendador.AgendarEm(evtFinalizar, CONFIG.TEMPO_PARA_FINALIZAR);
+            var evtFinalizar = new FinalizarServico(carro);
+            Agendador.AgendarEm(evtFinalizar, MotorPosto.TEMPO_PARA_FINALIZAR);
+        }
+        protected override void Destruir()
+        {
+            Gerenciador<IniciarServico>.morte(this);
         }
     }
 }

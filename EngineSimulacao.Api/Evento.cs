@@ -2,12 +2,20 @@ using System;
 
 namespace EngineSimulacao.Api
 {
-    public abstract class Evento<EnumConjuntos> where EnumConjuntos:struct, Enum
+    public abstract class Evento:ITemID
     {
-        protected readonly MotorExecucao<EnumConjuntos> motor;
-        public Evento(MotorExecucao<EnumConjuntos> motor){
-            this.motor = motor;
+        public int Id { get; private set; }
+        public Evento(){
+            this.Id = Gerenciador<Evento>.gerarId();
+            Gerenciador<Evento>.nascimento(this);
         }
-        public abstract void Executar();
+        public void Executar()
+        {
+            this.Estrategia();
+            Gerenciador<Evento>.morte(this);
+            this.Destruir();
+        }
+        protected abstract void Estrategia();
+        protected abstract void Destruir();
     }
 }

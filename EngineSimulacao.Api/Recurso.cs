@@ -5,6 +5,7 @@ namespace EngineSimulacao.Api
     // TODO: Rever execeções
     public sealed class Recurso
     {
+        public Recurso() {}
         public Recurso(int id, string nome, int quantidadeTotal)
         {
             Id = id;

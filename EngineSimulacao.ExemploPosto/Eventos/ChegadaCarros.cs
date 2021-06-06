@@ -2,23 +2,26 @@
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class ChegadaCarros : Evento<ConjuntosPosto>
+    public sealed class ChegadaCarros : Evento
     {
-        public ChegadaCarros(MotorExecucao<ConjuntosPosto> Motor): base(Motor) {}
+        public ChegadaCarros() {
+            Gerenciador<ChegadaCarros>.nascimento(this);
+        }
+        protected override void Estrategia() {
+            var novoCarro = new Carro();
+            MotorPosto.filaAtendimento.Adicionar(novoCarro);
+            var evtIniciar = new IniciarServico();
+            Agendador.AgendarAgora(evtIniciar);
 
-        public override void Executar() {
-            ConjuntoEntidade<ConjuntosPosto> filaAtendimento = this.motor.PegarConjunto(ConjuntosPosto.filaAtendimento);
-
-            var novoCarro = this.motor.Agendador.CriarEntidade();
-            filaAtendimento.Adicionar(novoCarro);
-            var evtIniciar = this.motor.criarEvento<IniciarServico>();
-            this.motor.Agendador.AgendarAgora(evtIniciar);
-          
-            if (this.motor.Agendador.Tempo < CONFIG.TEMPO_MAXIMO_CHEGADA_CARROS)
-            {
-                var evtChegada = this.motor.criarEvento<ChegadaCarros>();
-                this.motor.Agendador.AgendarEm(evtChegada, CONFIG.TEMPO_ENTRE_CARROS);
+            if(Agendador.Tempo < MotorPosto.TEMPO_MAXIMO_CHEGADA_CARROS){
+                var evtChegada = new ChegadaCarros();
+                Agendador.AgendarEm(evtChegada, MotorPosto.TEMPO_ENTRE_CARROS);
             }
+        }
+
+        protected override void Destruir()
+        {
+            Gerenciador<ChegadaCarros>.morte(this);
         }
     }
 }

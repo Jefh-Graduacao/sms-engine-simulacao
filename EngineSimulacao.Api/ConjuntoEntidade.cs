@@ -10,27 +10,20 @@ namespace EngineSimulacao.Api
         PRIORITY,
         NONE
     }
-    public class ConjuntoEntidade<EnumConjuntos> where EnumConjuntos:struct, Enum
+    public class ConjuntoEntidade<E> where E:Entidade
     {
-        public int Id { get; set; }
-        public string Nome { get; set; }
         public Mode Modo { get; set; } = Mode.FIFO;
         public int TamanhoMaximo { get; set; } = Int32.MaxValue;
         public int TamanhoAtual => this.entidadesAtuais.Count;
-        private readonly MotorExecucao<EnumConjuntos> motorExecucao;
-        private List<InfoEntidade> historicoEntidades = new();
-        private List<Entidade> entidadesAtuais = new();
+        private Historico<E> historico = new();
+        private List<E> entidadesAtuais = new();
 
-        public ConjuntoEntidade(MotorExecucao<EnumConjuntos> motorExecucao){
-            this.motorExecucao = motorExecucao;
-        }
-
-        public bool Adicionar(Entidade entidade){
+        public bool Adicionar(E entidade){
             if(TamanhoAtual == TamanhoMaximo) return false;
 
-            var tempo = motorExecucao.Agendador.Tempo;
-            var infoEntidade = new InfoEntidade(entidade, tempo);
-            this.historicoEntidades.Add(infoEntidade);
+            var tempo = Agendador.Tempo;
+            historico.nascimento(entidade);
+            
             switch(this.Modo){
                 case Mode.FIFO:
                     this.FIFOAdicionar(entidade);
@@ -41,8 +34,8 @@ namespace EngineSimulacao.Api
             }
             return false;
         }
-        public Entidade Remover() {
-            Entidade entidade;
+        public E Remover() {
+            E entidade = null;
             switch(this.Modo){
                 case Mode.FIFO:
                     entidade = this.FIFORemover();
@@ -50,37 +43,32 @@ namespace EngineSimulacao.Api
                 case Mode.LIFO:
                     entidade = this.LIFORemover();
                     break;
-                default:
-                    entidade = new Entidade(-1);
-                    break;
             }
-            InfoEntidade infoEntidadeRemovida = this.historicoEntidades.Find(info=>info.Entidade.Id == entidade.Id);
-            infoEntidadeRemovida.TempoSaida = motorExecucao.Agendador.Tempo;
-            infoEntidadeRemovida.NoConjunto = false;
+            historico.morte(entidade);
             return entidade;
         }
-        private void LIFOAdicionar(Entidade entidade){
-            Stack<Entidade> pilha = new Stack<Entidade>(this.entidadesAtuais);
+        private void LIFOAdicionar(E entidade){
+            Stack<E> pilha = new Stack<E>(this.entidadesAtuais);
             pilha.Push(entidade);
-            this.entidadesAtuais = new List<Entidade>(pilha);
+            this.entidadesAtuais = new List<E>(pilha);
         } 
 
-        private void FIFOAdicionar(Entidade entidade){
-            Queue<Entidade> fila = new Queue<Entidade>(this.entidadesAtuais);
+        private void FIFOAdicionar(E entidade){
+            Queue<E> fila = new Queue<E>(this.entidadesAtuais);
             fila.Enqueue(entidade);
-            this.entidadesAtuais = new List<Entidade>(fila);
+            this.entidadesAtuais = new List<E>(fila);
         }
-        private Entidade LIFORemover(){
-            Stack<Entidade> pilha = new Stack<Entidade>(this.entidadesAtuais);
-            Entidade entidade = pilha.Pop();
-            this.entidadesAtuais = new List<Entidade>(pilha);
+        private E LIFORemover(){
+            Stack<E> pilha = new Stack<E>(this.entidadesAtuais);
+            E entidade = pilha.Pop();
+            this.entidadesAtuais = new List<E>(pilha);
             return entidade;
         } 
 
-        private Entidade FIFORemover(){
-            Queue<Entidade> fila = new Queue<Entidade>(this.entidadesAtuais);
-            Entidade entidade = fila.Dequeue();
-            this.entidadesAtuais = new List<Entidade>(fila);
+        private E FIFORemover(){
+            Queue<E> fila = new Queue<E>(this.entidadesAtuais);
+            E entidade = fila.Dequeue();
+            this.entidadesAtuais = new List<E>(fila);
             return entidade;
         }
     }

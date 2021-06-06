@@ -3,19 +3,15 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public class Agendador<EnumConjuntos> where EnumConjuntos:struct, Enum
+    static public class Agendador
     {
         /// <summary>
         /// FEL - Future Event List
         /// </summary>
-        private readonly PriorityQueue<Evento<EnumConjuntos>, int> _listaEventosFuturos = new();
-        private readonly Dictionary<string, Recurso> _recursos = new();
-        private readonly List<Entidade> _entidades = new();
-
-        public int Tempo { get; private set; }
-        public Agendador(){ }
-        
-        public void SimularUmaExecucao()
+        static private readonly PriorityQueue<Evento, int> _listaEventosFuturos = new();
+        static private readonly Dictionary<string, Recurso> _recursos = new();
+        static public int Tempo { get; private set; }        
+        static public void SimularUmaExecucao()
         {
             _listaEventosFuturos.TryDequeue(out var evento, out var prioridade);
 
@@ -23,40 +19,31 @@ namespace EngineSimulacao.Api
             evento.Executar();
         }
 
-        public void Simular()
+        static public void Simular()
         {
-            while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
+            while(_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
             {
                 Tempo = prioridade;
                 evento.Executar();
             }
         }
         
-        private void AgendarEvento(Evento<EnumConjuntos> evento, int tempoSelecionado){
+        static private void AgendarEvento(Evento evento, int tempoSelecionado){
             _listaEventosFuturos.Enqueue(evento, tempoSelecionado);
         }
 
-        public void AgendarAgora(Evento<EnumConjuntos> evento) { this.AgendarEvento(evento, Tempo); }
+        static public void AgendarAgora(Evento evento) { AgendarEvento(evento, Tempo); }
 
-        public void AgendarEm(Evento<EnumConjuntos> evento, int tempoAdicionar) { this.AgendarEvento(evento, Tempo + tempoAdicionar); }
+        static public void AgendarEm(Evento evento, int tempoAdicionar) { AgendarEvento(evento, Tempo + tempoAdicionar); }
 
-        public void AgendarComTempoAbsoluto(Evento<EnumConjuntos> evento, int tempoAbsoluto) { this.AgendarEvento(evento, tempoAbsoluto); }
+        static public void AgendarComTempoAbsoluto(Evento evento, int tempoAbsoluto) { AgendarEvento(evento, tempoAbsoluto); }
 
-        public void CriarRecurso(string chave, Recurso recurso)
+        static public void CriarRecurso(string chave, Recurso recurso)
         {
             // todo: Atribuir Id ao recurso
             _recursos.Add(chave, recurso);
         }
 
-        public Recurso ObterRecurso(string chave) => _recursos[chave];
-
-        public Entidade CriarEntidade()
-        {
-            var entidade = new Entidade(_entidades.Count);
-            _entidades.Add(entidade);
-            return entidade;
-        }
-
-        public void DestruirEntidade(Entidade carro){ }
+        static public Recurso ObterRecurso(string chave) => _recursos[chave];
     }
 }
