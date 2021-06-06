@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    static public class ConjuntoRecurso<E> where E:Recurso, new()
+    static public class GerenciadorDeRecursos<E> where E:Recurso, new()
     {
         static public void criarNRecursos(int quantidade)
         {
@@ -27,10 +27,11 @@ namespace EngineSimulacao.Api
         }
         static public List<Alocacao<E>> Alocar(int quantidade)
         {
-            if(false == VerificarDisponibilidade(quantidade))
+            List<E> recursosLivres = _listarRecursosLivres();
+
+            if(recursosLivres.Count < quantidade)
                 throw new Exception("Não existem recursos livres suficientes");
 
-            List<E> recursosLivres = _listarRecursosLivres();
             List<Alocacao<E>> novasAlocacoes = new();
             for(int i = 0; i < quantidade; i++){
                 var novaAlocacao = new Alocacao<E>(recursosLivres[i]);

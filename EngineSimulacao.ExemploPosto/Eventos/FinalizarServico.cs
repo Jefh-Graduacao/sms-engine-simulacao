@@ -7,8 +7,8 @@ namespace EngineSimulacao.ExemploPosto.Eventos
     public sealed class FinalizarServico : Evento
     {
         private Carro _carro;
-        private List<Alocacao<Recurso>> _funcionariosAlocados;
-        public FinalizarServico(Carro carro, List<Alocacao<Recurso>> funcionariosAlocados)
+        private List<Alocacao<Funcionario>> _funcionariosAlocados;
+        public FinalizarServico(Carro carro, List<Alocacao<Funcionario>> funcionariosAlocados)
         {
             this._carro = carro;
             this._funcionariosAlocados = funcionariosAlocados;
@@ -17,7 +17,7 @@ namespace EngineSimulacao.ExemploPosto.Eventos
         protected override void Estrategia() {
             _carro.Destruir();
             
-            ConjuntoRecurso<Recurso>.Liberar(this._funcionariosAlocados);
+            GerenciadorDeRecursos<Funcionario>.Liberar(this._funcionariosAlocados);
 
             if (MotorPosto.filaAtendimento.TamanhoAtual > 0)
             {

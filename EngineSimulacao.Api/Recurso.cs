@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    // TODO: Rever execeções
-    public class Recurso:ITemID
+        public class Recurso:ITemID
     {
         public int Id { get; private set; }
         public bool Alocado { get; set; } = false;

@@ -9,7 +9,7 @@ namespace EngineSimulacao.ExemploPosto
     {
         public static void Main(string[] args)
         {
-            ConjuntoRecurso<Recurso>.criarNRecursos(MotorPosto.TOTAL_FUNCIONARIOS);
+            GerenciadorDeRecursos<Funcionario>.criarNRecursos(MotorPosto.TOTAL_FUNCIONARIOS);
             var evtIniciar = new ChegadaCarros();
             Agendador.AgendarAgora(evtIniciar);
             Agendador.Simular();
