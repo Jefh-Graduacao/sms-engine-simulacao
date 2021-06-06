@@ -67,6 +67,19 @@ namespace EngineSimulacao.Api
             this.nome = "Histórico " + nome;
             ColetaDeDados.NovoHistorico<T>(this);
         }
+        private string pegarTiposGenericos(Type tipo){
+            var argumentosGenericos = tipo.GetGenericArguments();
+            if(argumentosGenericos.Length == 0)
+                return "";
+            string saida = "<";
+            for(int i = 0; i < argumentosGenericos.Length; i++){
+                var tipoArgumento = (Type)argumentosGenericos.GetValue(i);
+                saida = saida + " " + tipoArgumento.Name;
+            }
+            saida = saida + " >";
+            return saida;
+        }
+
         private string gerarNomeHistorico(){
             var tipo = typeof(T);
             var tipoBase = tipo.BaseType;
@@ -74,10 +87,12 @@ namespace EngineSimulacao.Api
             var nomeClasse = tipo.Name;
             var nomeClasseBase = tipoBase.Name;
 
+            string genericos = this.pegarTiposGenericos(tipo);
+
             if(nomeClasseBase != "Object")
-                return nomeClasseBase + " " + nomeClasse;
+                return nomeClasseBase + " " + nomeClasse + " " +  genericos;
             else
-                return nomeClasse;
+                return nomeClasse + " " + genericos;
         }
     }
 }
