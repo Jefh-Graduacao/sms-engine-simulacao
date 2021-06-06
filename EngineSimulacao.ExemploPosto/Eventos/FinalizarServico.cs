@@ -15,8 +15,7 @@ namespace EngineSimulacao.ExemploPosto.Eventos
         protected override void Estrategia() {
             _carro.Destruir();
             
-            var funcionarios = Agendador.ObterRecurso("funcionarios");
-            funcionarios.Liberar(MotorPosto.FUNCIONARIOS_NECESSARIOS);
+            MotorPosto.funcionarios.Liberar(MotorPosto.FUNCIONARIOS_NECESSARIOS);
 
             if (MotorPosto.filaAtendimento.TamanhoAtual > 0)
             {

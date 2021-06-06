@@ -9,7 +9,6 @@ namespace EngineSimulacao.Api
         /// FEL - Future Event List
         /// </summary>
         static private readonly PriorityQueue<Evento, int> _listaEventosFuturos = new();
-        static private readonly Dictionary<string, Recurso> _recursos = new();
         static public int Tempo { get; private set; }        
         static public void SimularUmaExecucao()
         {
@@ -37,13 +36,5 @@ namespace EngineSimulacao.Api
         static public void AgendarEm(Evento evento, int tempoAdicionar) { AgendarEvento(evento, Tempo + tempoAdicionar); }
 
         static public void AgendarComTempoAbsoluto(Evento evento, int tempoAbsoluto) { AgendarEvento(evento, tempoAbsoluto); }
-
-        static public void CriarRecurso(string chave, Recurso recurso)
-        {
-            // todo: Atribuir Id ao recurso
-            _recursos.Add(chave, recurso);
-        }
-
-        static public Recurso ObterRecurso(string chave) => _recursos[chave];
     }
 }

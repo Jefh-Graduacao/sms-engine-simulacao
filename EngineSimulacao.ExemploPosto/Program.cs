@@ -8,7 +8,6 @@ namespace EngineSimulacao.ExemploPosto
     {
         public static void Main(string[] args)
         {
-            Agendador.CriarRecurso("funcionarios", new Recurso(1, "Funcionários", MotorPosto.TOTAL_FUNCIONARIOS));
             var evtIniciar = new ChegadaCarros();
             Agendador.AgendarAgora(evtIniciar);
             Agendador.Simular();
