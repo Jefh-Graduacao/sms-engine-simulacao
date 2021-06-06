@@ -3,8 +3,30 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public class Historico<T> where T:ITemID
+    public class Historico<T> where T:notnull, ITemID
     {
+        public string nome { get; private set; }
+        public Historico(){
+            var tipo = typeof(T);
+            var tipoBase = tipo.BaseType;
+            
+            var nomeClasse = tipo.Name;
+            var nomeClasseBase = tipoBase.Name;
+
+            if(nomeClasseBase != "Object")
+                this.init(nomeClasseBase + " " + nomeClasse);
+            else
+                this.init(typeof(T).Name);
+        }
+        public Historico(string nome) {
+            this.init(nome);
+        }
+
+        private void init(string nome)
+        {
+            this.nome = "Histórico " + nome;
+            ColetaDeDados.NovoHistorico<T>(this);
+        }
         public List<InfoInstancia<T>> lista { get; private set; } = new();
 
         public void nascimento(T instancia)

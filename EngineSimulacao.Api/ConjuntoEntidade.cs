@@ -12,17 +12,22 @@ namespace EngineSimulacao.Api
     }
     public class ConjuntoEntidade<E> where E:Entidade
     {
+        public string Nome { private set; get; }
         public Mode Modo { get; set; } = Mode.FIFO;
         public int TamanhoMaximo { get; set; } = Int32.MaxValue;
-        public int TamanhoAtual => this.entidadesAtuais.Count;
-        private Historico<E> historico = new();
-        private List<E> entidadesAtuais = new();
+        public int TamanhoAtual => this._entidadesAtuais.Count;
+        private Historico<E> _historico;
+        private List<E> _entidadesAtuais = new();
 
+        public ConjuntoEntidade(string nome)
+        {
+            this._historico = new Historico<E>("ConjuntoEntidade " + nome);
+        }
         public bool Adicionar(E entidade){
             if(TamanhoAtual == TamanhoMaximo) return false;
 
             var tempo = Agendador.Tempo;
-            historico.nascimento(entidade);
+            _historico.nascimento(entidade);
             
             switch(this.Modo){
                 case Mode.FIFO:
@@ -44,31 +49,31 @@ namespace EngineSimulacao.Api
                     entidade = this.LIFORemover();
                     break;
             }
-            historico.morte(entidade);
+            _historico.morte(entidade);
             return entidade;
         }
         private void LIFOAdicionar(E entidade){
-            Stack<E> pilha = new Stack<E>(this.entidadesAtuais);
+            Stack<E> pilha = new Stack<E>(this._entidadesAtuais);
             pilha.Push(entidade);
-            this.entidadesAtuais = new List<E>(pilha);
+            this._entidadesAtuais = new List<E>(pilha);
         } 
 
         private void FIFOAdicionar(E entidade){
-            Queue<E> fila = new Queue<E>(this.entidadesAtuais);
+            Queue<E> fila = new Queue<E>(this._entidadesAtuais);
             fila.Enqueue(entidade);
-            this.entidadesAtuais = new List<E>(fila);
+            this._entidadesAtuais = new List<E>(fila);
         }
         private E LIFORemover(){
-            Stack<E> pilha = new Stack<E>(this.entidadesAtuais);
+            Stack<E> pilha = new Stack<E>(this._entidadesAtuais);
             E entidade = pilha.Pop();
-            this.entidadesAtuais = new List<E>(pilha);
+            this._entidadesAtuais = new List<E>(pilha);
             return entidade;
         } 
 
         private E FIFORemover(){
-            Queue<E> fila = new Queue<E>(this.entidadesAtuais);
+            Queue<E> fila = new Queue<E>(this._entidadesAtuais);
             E entidade = fila.Dequeue();
-            this.entidadesAtuais = new List<E>(fila);
+            this._entidadesAtuais = new List<E>(fila);
             return entidade;
         }
     }

@@ -5,7 +5,7 @@ namespace EngineSimulacao.ExemploPosto
     public static class MotorPosto
     {
         //Modificar para funções com retorno probabilístico, caso necessário
-        public static readonly ConjuntoEntidade<Carro> filaAtendimento = new();
+        public static readonly ConjuntoEntidade<Carro> filaAtendimento = new ConjuntoEntidade<Carro>("FilaAtendimento");
         public static readonly Recurso funcionarios = new Recurso(1, "Funcionários", TOTAL_FUNCIONARIOS);
         public static int FUNCIONARIOS_NECESSARIOS => 2;
         public static int TOTAL_FUNCIONARIOS => 6;

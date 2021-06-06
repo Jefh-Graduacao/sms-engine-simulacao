@@ -1,6 +1,7 @@
 ﻿using System;
 using EngineSimulacao.Api;
 using EngineSimulacao.ExemploPosto.Eventos;
+using System.Collections.Generic;
 
 namespace EngineSimulacao.ExemploPosto
 {
@@ -11,6 +12,7 @@ namespace EngineSimulacao.ExemploPosto
             var evtIniciar = new ChegadaCarros();
             Agendador.AgendarAgora(evtIniciar);
             Agendador.Simular();
+            List<dynamic> listaHistorico = ColetaDeDados.listaDeHistoricos;
         }
     }
 }
