@@ -10,14 +10,14 @@ namespace EngineSimulacao.ExemploPosto.Eventos
         }
 
         protected override void Estrategia() {            
-            if(false == MotorPosto.funcionarios.VerificarDisponibilidade(MotorPosto.FUNCIONARIOS_NECESSARIOS))
+            if(false == ConjuntoRecurso<Recurso>.VerificarDisponibilidade(MotorPosto.FUNCIONARIOS_NECESSARIOS))
                 return;
 
             var carro = MotorPosto.filaAtendimento.Remover();
             
-            MotorPosto.funcionarios.TentarAlocar(MotorPosto.FUNCIONARIOS_NECESSARIOS);
+            var funcionariosAlocados = ConjuntoRecurso<Recurso>.Alocar(MotorPosto.FUNCIONARIOS_NECESSARIOS);
 
-            var evtFinalizar = new FinalizarServico(carro);
+            var evtFinalizar = new FinalizarServico(carro, funcionariosAlocados);
             Agendador.AgendarEm(evtFinalizar, MotorPosto.TEMPO_PARA_FINALIZAR);
         }
         protected override void Destruir()

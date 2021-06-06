@@ -5,22 +5,24 @@ namespace EngineSimulacao.Api
 {
     static public class Gerenciador<T> where T:ITemID
     {
+        static private int _contadorId;
         static private Historico<T> historico = new();
-        static public int gerarId()
-        {
-            return historico.lista.Count;
-        }
+        static public int gerarId() => _contadorId++;
         static public void nascimento(T instancia)
         {
             historico.nascimento(instancia);
         }
-        static public void morte(T instancia){
+        static public void morte(T instancia)
+        {
             historico.morte(instancia);
         }
-        // static private E instanciar<E>(int id) where E:T
-        // {
-        //     E instancia = (E)Activator.CreateInstance(typeof(E), id);
-        //     return instancia;
-        // }
+        static public List<InfoInstancia<T>> listarVivos()
+        {
+            return historico.listarVivos();
+        }
+        static public List<InfoInstancia<T>> listarMortos()
+        {
+            return historico.listarMortos();
+        }
     }
 }

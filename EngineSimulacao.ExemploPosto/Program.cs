@@ -9,10 +9,20 @@ namespace EngineSimulacao.ExemploPosto
     {
         public static void Main(string[] args)
         {
+            ConjuntoRecurso<Recurso>.criarNRecursos(MotorPosto.TOTAL_FUNCIONARIOS);
             var evtIniciar = new ChegadaCarros();
             Agendador.AgendarAgora(evtIniciar);
             Agendador.Simular();
-            List<dynamic> listaHistorico = ColetaDeDados.listaDeHistoricos;
+            List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
+            
+            foreach(var historico in listaHistorico)
+            {
+                Console.WriteLine("\n\n------------");
+                Console.WriteLine(historico.nome + " maior tempo de vida " + historico.maiorTempoDeVida() );
+                Console.WriteLine(historico.nome + " menor tempo de vida " + historico.menorTempoDeVida() );
+                Console.WriteLine(historico.nome + " tempo médio de vida " + historico.tempoMedioDeVida() );
+                Console.WriteLine("------------\n\n");
+            }
         }
     }
 }
