@@ -2,8 +2,12 @@ using System;
 
 namespace EngineSimulacao.Api
 {
-    public interface ITemID { 
-        int Id { get; }
+    public abstract class TemID { 
+        public int Id { get; private set; }
+
+        public TemID(){
+            this.Id = Gerenciador<TemID>.gerarId();
+        }
     }
 
     public class InfoInstancia<T>

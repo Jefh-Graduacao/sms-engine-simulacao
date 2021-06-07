@@ -9,7 +9,7 @@ namespace EngineSimulacao.Api
         public abstract double tempoMedioDeVida();
         public abstract int maiorTempoDeVida();
     }
-    public class Historico<T>:HistoricoBase where T:notnull, ITemID
+    public class Historico<T>:HistoricoBase where T:notnull, TemID
     {
         public Historico(){
             this.init(this.gerarNomeHistorico());

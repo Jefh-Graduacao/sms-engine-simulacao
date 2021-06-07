@@ -7,7 +7,7 @@ namespace EngineSimulacao.Api
     {
         static public List<HistoricoBase> listaDeHistoricos { get; private set; } = new();
 
-        static public void NovoHistorico<T>(Historico<T> historico) where T:ITemID
+        static public void NovoHistorico<T>(Historico<T> historico) where T:TemID
         {
             listaDeHistoricos.Add(historico);
         }

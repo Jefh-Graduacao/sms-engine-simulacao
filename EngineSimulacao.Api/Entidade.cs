@@ -1,11 +1,9 @@
 namespace EngineSimulacao.Api
 {
-    public abstract class Entidade:ITemID
+    public abstract class Entidade:TemID
     {
-        public int Id { get; private set; }
         public Entidade()
         { 
-            this.Id = Gerenciador<Entidade>.gerarId();
             Gerenciador<Entidade>.nascimento(this);
         }
         public void Destruir()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    static public class Gerenciador<T> where T:ITemID
+    static public class Gerenciador<T> where T:TemID
     {
         static private int _contadorId;
         static private Historico<T> historico = new();
