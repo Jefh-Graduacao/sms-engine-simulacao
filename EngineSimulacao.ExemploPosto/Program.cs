@@ -1,7 +1,8 @@
-﻿using System;
-using EngineSimulacao.Api;
+﻿using EngineSimulacao.Api;
 using EngineSimulacao.ExemploPosto.Eventos;
+using System;
 using System.Collections.Generic;
+using EngineSimulacao.ExemploPosto.Recursos;
 
 namespace EngineSimulacao.ExemploPosto
 {
@@ -9,10 +10,12 @@ namespace EngineSimulacao.ExemploPosto
     {
         public static void Main(string[] args)
         {
-            GerenciadorDeRecursos<Funcionario>.criarNRecursos(MotorPosto.TOTAL_FUNCIONARIOS);
+            GerenciadorDeRecursos<Funcionario>.CriarRecursos(MotorPosto.TotalFuncionarios);
+
             var evtIniciar = new ChegadaCarros();
             Agendador.AgendarAgora(evtIniciar);
             Agendador.Simular();
+
             List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
             
             foreach(var historico in listaHistorico)

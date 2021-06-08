@@ -1,22 +1,28 @@
 ﻿using EngineSimulacao.Api;
+using EngineSimulacao.ExemploPosto.Entidades;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class ChegadaCarros : Evento
     {
-        public ChegadaCarros() {
+        public ChegadaCarros()
+        {
             Gerenciador<ChegadaCarros>.nascimento(this);
         }
-        protected override void Estrategia() {
+
+        protected override void Estrategia()
+        {
             var novoCarro = new Carro();
-            MotorPosto.filaAtendimento.Adicionar(novoCarro);
+            MotorPosto.FilaAtendimento.Adicionar(novoCarro);
+
             var evtIniciar = new IniciarServico();
             Agendador.AgendarAgora(evtIniciar);
 
-            if(Agendador.Tempo < MotorPosto.TEMPO_MAXIMO_CHEGADA_CARROS){
-                var evtChegada = new ChegadaCarros();
-                Agendador.AgendarEm(evtChegada, MotorPosto.TEMPO_ENTRE_CARROS);
-            }
+            if (Agendador.Tempo >= MotorPosto.TempoMaximoChegadaCarros)
+                return;
+
+            var evtChegada = new ChegadaCarros();
+            Agendador.AgendarEm(evtChegada, MotorPosto.TempoEntreCarros);
         }
 
         protected override void Destruir()

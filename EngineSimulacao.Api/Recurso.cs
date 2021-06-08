@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EngineSimulacao.Api
+﻿namespace EngineSimulacao.Api
 {
-        public class Recurso:ITemID
+    public class Recurso : ITemId
     {
         public int Id { get; private set; }
         public bool Alocado { get; set; } = false;
-        public Recurso(){
-            this.Id = Gerenciador<Recurso>.gerarId();
+
+        public Recurso()
+        {
+            Id = Gerenciador<Recurso>.GerarId();
             Gerenciador<Recurso>.nascimento(this);
         }
     }

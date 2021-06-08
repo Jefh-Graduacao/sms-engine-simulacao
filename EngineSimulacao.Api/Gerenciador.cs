@@ -1,28 +1,32 @@
-using System;
 using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    static public class Gerenciador<T> where T:ITemID
+    public static class Gerenciador<T> where T : ITemId
     {
-        static private int _contadorId;
-        static private Historico<T> historico = new();
-        static public int gerarId() => _contadorId++;
-        static public void nascimento(T instancia)
+        private static int _contadorId;
+        private static readonly Historico<T> Historico = new();
+
+        public static int GerarId() => _contadorId++;
+
+        public static void nascimento(T instancia)
         {
-            historico.nascimento(instancia);
+            Historico.nascimento(instancia);
         }
-        static public void morte(T instancia)
+
+        public static void morte(T instancia)
         {
-            historico.morte(instancia);
+            Historico.morte(instancia);
         }
-        static public List<InfoInstancia<T>> listarVivos()
+
+        public static List<InfoInstancia<T>> listarVivos()
         {
-            return historico.listarVivos();
+            return Historico.listarVivos();
         }
-        static public List<InfoInstancia<T>> listarMortos()
+
+        public static List<InfoInstancia<T>> listarMortos()
         {
-            return historico.listarMortos();
+            return Historico.listarMortos();
         }
     }
 }

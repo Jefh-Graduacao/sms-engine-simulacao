@@ -1,0 +1,8 @@
+﻿using EngineSimulacao.Api;
+
+namespace EngineSimulacao.Restaurante.Recursos
+{
+    public sealed class Mesa4Lugares : Recurso
+    {
+    }
+}

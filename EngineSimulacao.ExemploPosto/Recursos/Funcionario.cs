@@ -1,8 +1,11 @@
-namespace EngineSimulacao.Api
+using EngineSimulacao.Api;
+
+namespace EngineSimulacao.ExemploPosto.Recursos
 {
     public class Funcionario : Recurso
     {
-        public Funcionario(){
+        public Funcionario()
+        {
             Gerenciador<Funcionario>.nascimento(this);
         }
     }

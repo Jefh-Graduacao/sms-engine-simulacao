@@ -1,16 +1,16 @@
-using System;
 using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    static public class Agendador
+    public static class Agendador
     {
         /// <summary>
         /// FEL - Future Event List
         /// </summary>
-        static private readonly PriorityQueue<Evento, int> _listaEventosFuturos = new();
-        static public int Tempo { get; private set; }        
-        static public void SimularUmaExecucao()
+        private static readonly PriorityQueue<Evento, int> _listaEventosFuturos = new();
+        public static int Tempo { get; private set; }
+
+        public static void SimularUmaExecucao()
         {
             _listaEventosFuturos.TryDequeue(out var evento, out var prioridade);
 
@@ -18,23 +18,33 @@ namespace EngineSimulacao.Api
             evento.Executar();
         }
 
-        static public void Simular()
+        public static void Simular()
         {
-            while(_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
+            while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
             {
                 Tempo = prioridade;
                 evento.Executar();
             }
         }
-        
-        static private void AgendarEvento(Evento evento, int tempoSelecionado){
+
+        private static void AgendarEvento(Evento evento, int tempoSelecionado)
+        {
             _listaEventosFuturos.Enqueue(evento, tempoSelecionado);
         }
 
-        static public void AgendarAgora(Evento evento) { AgendarEvento(evento, Tempo); }
+        public static void AgendarAgora(Evento evento)
+        {
+            AgendarEvento(evento, Tempo);
+        }
 
-        static public void AgendarEm(Evento evento, int tempoAdicionar) { AgendarEvento(evento, Tempo + tempoAdicionar); }
+        public static void AgendarEm(Evento evento, int tempoAdicionar)
+        {
+            AgendarEvento(evento, Tempo + tempoAdicionar);
+        }
 
-        static public void AgendarComTempoAbsoluto(Evento evento, int tempoAbsoluto) { AgendarEvento(evento, tempoAbsoluto); }
+        public static void AgendarComTempoAbsoluto(Evento evento, int tempoAbsoluto)
+        {
+            AgendarEvento(evento, tempoAbsoluto);
+        }
     }
 }

@@ -1,24 +1,22 @@
-using System;
-using System.Collections.Generic;
-
 namespace EngineSimulacao.Api
 {
-    public class Alocacao<E>:ITemID where E:Recurso, new()
+    public class Alocacao<T> : ITemId where T : Recurso, new()
     {
-        public int Id { get; private set; }
-        public E recurso { get; private set; }
-        public Alocacao(E recurso)
+        public int Id { get; }
+        public T Recurso { get; }
+
+        public Alocacao(T recurso)
         {
-            this.Id = Gerenciador<Alocacao<E>>.gerarId();
-            Gerenciador<Alocacao<E>>.nascimento(this);
-            this.recurso = recurso;
-            this.recurso.Alocado = true;
+            Id = Gerenciador<Alocacao<T>>.GerarId();
+            Gerenciador<Alocacao<T>>.nascimento(this);
+            Recurso = recurso;
+            Recurso.Alocado = true;
         }
 
         public void Desalocar()
         {
-            Gerenciador<Alocacao<E>>.morte(this);
-            this.recurso.Alocado = false;
+            Gerenciador<Alocacao<T>>.morte(this);
+            Recurso.Alocado = false;
         }
     }
 }

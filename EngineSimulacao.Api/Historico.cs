@@ -3,76 +3,98 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public abstract class HistoricoBase {
+    public abstract class HistoricoBase
+    {
         public string nome { get; protected set; }
         public abstract int menorTempoDeVida();
         public abstract double tempoMedioDeVida();
         public abstract int maiorTempoDeVida();
     }
-    public class Historico<T>:HistoricoBase where T:notnull, ITemID
+
+    public class Historico<T> : HistoricoBase where T : notnull, ITemId
     {
-        public Historico(){
-            this.init(this.gerarNomeHistorico());
+        public Historico()
+        {
+            init(gerarNomeHistorico());
         }
-        public Historico(string nome) {
-            this.init(nome);
+
+        public Historico(string nome)
+        {
+            init(nome);
         }
+
         public List<InfoInstancia<T>> lista { get; private set; } = new();
 
         public void nascimento(T instancia)
         {
             var info = new InfoInstancia<T>(instancia);
-            info.viver();
+            info.Viver();
             lista.Add(info);
         }
-        public void morte(T instanciaMorta){
-            var infoInstanciaDestruida = lista.Find(info=>info.Instancia.Id == instanciaMorta.Id);
-            infoInstanciaDestruida.morrer();
-        }
-        public List<InfoInstancia<T>> listarVivos()
+
+        public void morte(T instanciaMorta)
         {
-            return this.lista.FindAll(Info=>Info.Vivo);
-        }
-        public List<InfoInstancia<T>> listarMortos()
-        {
-            return this.lista.FindAll(Info=>false == Info.Vivo);
+            var infoInstanciaDestruida = lista.Find(info => info.Instancia.Id == instanciaMorta.Id);
+            infoInstanciaDestruida.Morrer();
         }
 
-        public override int menorTempoDeVida(){
-            if(this.lista.Count == 0) return 0;
-            int menor = this.lista[0].TempoDeVida;
-            foreach(var Info in this.lista){
-                if(Info.TempoDeVida < menor) menor = Info.TempoDeVida;
+        public List<InfoInstancia<T>> listarVivos()
+        {
+            return lista.FindAll(Info => Info.Vivo);
+        }
+
+        public List<InfoInstancia<T>> listarMortos()
+        {
+            return lista.FindAll(Info => false == Info.Vivo);
+        }
+
+        public override int menorTempoDeVida()
+        {
+            if (lista.Count == 0) return 0;
+            int menor = lista[0].TempoDeVida;
+            foreach (var Info in lista)
+            {
+                if (Info.TempoDeVida < menor) menor = Info.TempoDeVida;
             }
             return menor;
         }
-        public override double tempoMedioDeVida() {
-            if(this.lista.Count == 0) return 0;
+
+        public override double tempoMedioDeVida()
+        {
+            if (lista.Count == 0) return 0;
             double soma = 0;
-            foreach(var Info in this.lista){
+            foreach (var Info in lista)
+            {
                 soma += Info.TempoDeVida;
             }
-            return soma / this.lista.Count;
+            return soma / lista.Count;
         }
-        public override int maiorTempoDeVida(){
-            if(this.lista.Count == 0) return 0;
-            int maior = this.lista[0].TempoDeVida;
-            foreach(var Info in this.lista){
-                if(Info.TempoDeVida > maior) maior = Info.TempoDeVida;
+
+        public override int maiorTempoDeVida()
+        {
+            if (lista.Count == 0) return 0;
+            int maior = lista[0].TempoDeVida;
+            foreach (var Info in lista)
+            {
+                if (Info.TempoDeVida > maior) maior = Info.TempoDeVida;
             }
             return maior;
         }
+
         private void init(string nome)
         {
             this.nome = "Histórico " + nome;
             ColetaDeDados.NovoHistorico<T>(this);
         }
-        private string pegarTiposGenericos(Type tipo){
+
+        private string pegarTiposGenericos(Type tipo)
+        {
             var argumentosGenericos = tipo.GetGenericArguments();
-            if(argumentosGenericos.Length == 0)
+            if (argumentosGenericos.Length == 0)
                 return "";
             string saida = "<";
-            for(int i = 0; i < argumentosGenericos.Length; i++){
+            for (int i = 0; i < argumentosGenericos.Length; i++)
+            {
                 var tipoArgumento = (Type)argumentosGenericos.GetValue(i);
                 saida = saida + " " + tipoArgumento.Name;
             }
@@ -80,17 +102,18 @@ namespace EngineSimulacao.Api
             return saida;
         }
 
-        private string gerarNomeHistorico(){
+        private string gerarNomeHistorico()
+        {
             var tipo = typeof(T);
             var tipoBase = tipo.BaseType;
-            
+
             var nomeClasse = tipo.Name;
             var nomeClasseBase = tipoBase.Name;
 
-            string genericos = this.pegarTiposGenericos(tipo);
+            string genericos = pegarTiposGenericos(tipo);
 
-            if(nomeClasseBase != "Object")
-                return nomeClasseBase + " " + nomeClasse + " " +  genericos;
+            if (nomeClasseBase != "Object")
+                return nomeClasseBase + " " + nomeClasse + " " + genericos;
             else
                 return nomeClasse + " " + genericos;
         }

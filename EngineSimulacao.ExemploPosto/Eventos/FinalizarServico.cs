@@ -1,30 +1,35 @@
-﻿using System.Collections.Generic;
-using EngineSimulacao.Api;
-using System;
+﻿using EngineSimulacao.Api;
+using EngineSimulacao.ExemploPosto.Entidades;
+using EngineSimulacao.ExemploPosto.Recursos;
+using System.Collections.Generic;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class FinalizarServico : Evento
     {
-        private Carro _carro;
-        private List<Alocacao<Funcionario>> _funcionariosAlocados;
+        private readonly Carro _carro;
+        private readonly List<Alocacao<Funcionario>> _funcionariosAlocados;
+
         public FinalizarServico(Carro carro, List<Alocacao<Funcionario>> funcionariosAlocados)
         {
-            this._carro = carro;
-            this._funcionariosAlocados = funcionariosAlocados;
+            _carro = carro;
+            _funcionariosAlocados = funcionariosAlocados;
             Gerenciador<FinalizarServico>.nascimento(this);
         }
-        protected override void Estrategia() {
+
+        protected override void Estrategia() 
+        {
             _carro.Destruir();
             
-            GerenciadorDeRecursos<Funcionario>.Liberar(this._funcionariosAlocados);
+            GerenciadorDeRecursos<Funcionario>.Liberar(_funcionariosAlocados);
 
-            if (MotorPosto.filaAtendimento.TamanhoAtual > 0)
+            if (MotorPosto.FilaAtendimento.TamanhoAtual > 0)
             {
                 var evtIniciar = new IniciarServico();
                 Agendador.AgendarAgora(evtIniciar);
             }
         }
+
         protected override void Destruir()
         {
             Gerenciador<FinalizarServico>.morte(this);

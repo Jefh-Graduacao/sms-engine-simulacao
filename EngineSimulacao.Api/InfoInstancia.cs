@@ -1,8 +1,7 @@
-using System;
-
 namespace EngineSimulacao.Api
 {
-    public interface ITemID { 
+    public interface ITemId
+    {
         int Id { get; }
     }
 
@@ -12,22 +11,25 @@ namespace EngineSimulacao.Api
         public bool Vivo { set; get; }
         public int Prioridade { set; get; }
         public int TempoCriacao { set; get; }
-        public int TempoDestruicao { set; get; } = Int32.MinValue;
+        public int TempoDestruicao { set; get; } = int.MinValue;
         public int TempoDeVida => Vivo ? Agendador.Tempo - TempoCriacao : TempoDestruicao - TempoCriacao;
 
         public InfoInstancia(T instancia)
         {
-            this.Instancia = instancia;
+            Instancia = instancia;
         }
-        public void viver()
+
+        public void Viver()
         {
-            this.Vivo = true;
-            this.TempoCriacao = Agendador.Tempo;
-            this.Prioridade = Int32.MinValue;
+            Vivo = true;
+            TempoCriacao = Agendador.Tempo;
+            Prioridade = int.MinValue;
         }
-        public void morrer(){
-            this.TempoDestruicao = Agendador.Tempo;
-            this.Vivo = false;
+
+        public void Morrer()
+        {
+            TempoDestruicao = Agendador.Tempo;
+            Vivo = false;
         }
     }
 }

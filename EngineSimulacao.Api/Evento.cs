@@ -1,20 +1,22 @@
-using System;
-
 namespace EngineSimulacao.Api
 {
-    public abstract class Evento:ITemID
+    public abstract class Evento : ITemId
     {
         public int Id { get; private set; }
-        public Evento(){
-            this.Id = Gerenciador<Evento>.gerarId();
+
+        protected Evento()
+        {
+            Id = Gerenciador<Evento>.GerarId();
             Gerenciador<Evento>.nascimento(this);
         }
+
         public void Executar()
         {
-            this.Estrategia();
+            Estrategia();
             Gerenciador<Evento>.morte(this);
-            this.Destruir();
+            Destruir();
         }
+
         protected abstract void Estrategia();
         protected abstract void Destruir();
     }

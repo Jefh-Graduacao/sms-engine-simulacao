@@ -1,14 +1,15 @@
 using EngineSimulacao.Api;
 
-namespace EngineSimulacao.ExemploPosto
+namespace EngineSimulacao.ExemploPosto.Entidades
 {
     public sealed class Carro : Entidade
     {
-        public Carro() {
+        public Carro()
+        {
             Gerenciador<Carro>.nascimento(this);
         }
 
-        protected override void DestruirIntancia()
+        protected override void DestruirInstancia()
         {
             Gerenciador<Carro>.morte(this);
         }
