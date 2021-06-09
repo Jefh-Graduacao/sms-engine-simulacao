@@ -2,13 +2,9 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public static class Gerenciador<T> where T : ITemId
+    public static class Gerenciador<T> where T : Gerenciado
     {
-        private static int _contadorId;
         private static readonly Historico<T> Historico = new();
-
-        public static int GerarId() => _contadorId++;
-
         public static void nascimento(T instancia)
         {
             Historico.nascimento(instancia);

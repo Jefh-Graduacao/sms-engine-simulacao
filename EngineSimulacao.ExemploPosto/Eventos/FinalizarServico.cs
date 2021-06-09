@@ -14,7 +14,6 @@ namespace EngineSimulacao.ExemploPosto.Eventos
         {
             _carro = carro;
             _funcionariosAlocados = funcionariosAlocados;
-            Gerenciador<FinalizarServico>.nascimento(this);
         }
 
         protected override void Estrategia() 
@@ -28,11 +27,6 @@ namespace EngineSimulacao.ExemploPosto.Eventos
                 var evtIniciar = new IniciarServico();
                 Agendador.AgendarAgora(evtIniciar);
             }
-        }
-
-        protected override void Destruir()
-        {
-            Gerenciador<FinalizarServico>.morte(this);
         }
     }
 }

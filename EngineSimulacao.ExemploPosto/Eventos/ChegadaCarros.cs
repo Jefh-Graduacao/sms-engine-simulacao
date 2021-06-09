@@ -5,10 +5,7 @@ namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class ChegadaCarros : Evento
     {
-        public ChegadaCarros()
-        {
-            Gerenciador<ChegadaCarros>.nascimento(this);
-        }
+        public ChegadaCarros(){}
 
         protected override void Estrategia()
         {
@@ -23,11 +20,6 @@ namespace EngineSimulacao.ExemploPosto.Eventos
 
             var evtChegada = new ChegadaCarros();
             Agendador.AgendarEm(evtChegada, MotorPosto.TempoEntreCarros);
-        }
-
-        protected override void Destruir()
-        {
-            Gerenciador<ChegadaCarros>.morte(this);
         }
     }
 }

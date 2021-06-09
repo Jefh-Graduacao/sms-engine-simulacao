@@ -1,10 +1,5 @@
 namespace EngineSimulacao.Api
 {
-    public interface ITemId
-    {
-        int Id { get; }
-    }
-
     public class InfoInstancia<T>
     {
         public T Instancia { set; get; }

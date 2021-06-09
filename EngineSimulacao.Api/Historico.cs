@@ -11,7 +11,7 @@ namespace EngineSimulacao.Api
         public abstract int maiorTempoDeVida();
     }
 
-    public class Historico<T> : HistoricoBase where T : notnull, ITemId
+    public class Historico<T> : HistoricoBase where T : notnull, Gerenciado
     {
         public Historico()
         {
