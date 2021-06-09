@@ -9,6 +9,7 @@ namespace EngineSimulacao.Api
     /// </summary>
     public abstract class Gerenciado
     {
+        public static string NomeTipo { get; } = typeof(Gerenciado).Name;
         private static int _contadorId;
         private static int _gerarId() => _contadorId++;
         public int Id { get; private set; }
@@ -24,7 +25,7 @@ namespace EngineSimulacao.Api
         protected void _nascerEmTodosOsNiveis(){
             Type tipoAtual = this.GetType();
 
-            while(tipoAtual.Name != "Gerenciado"){
+            while(tipoAtual.Name != Gerenciado.NomeTipo){
                 this.chamarGerenciadorDoTipo(tipoAtual, "nascimento");
                 tipoAtual = tipoAtual.BaseType;
             }

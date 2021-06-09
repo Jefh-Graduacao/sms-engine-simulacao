@@ -80,15 +80,27 @@ namespace EngineSimulacao.Api
             }
             return maior;
         }
-
         private void init(string nome)
         {
             this.nome = "Histórico " + nome;
             ColetaDeDados.NovoHistorico<T>(this);
         }
-
-        private string pegarTiposGenericos(Type tipo)
+        private string pegarNomeSemGenericos()
         {
+            var tipo = typeof(T);
+            var tipoBase = tipo.BaseType;
+
+            var nomeClasse = tipo.Name;
+            var nomeClasseBase = tipoBase.Name;
+
+            if (nomeClasseBase != "Object" && nomeClasseBase != Gerenciado.NomeTipo)
+                return nomeClasseBase + " " + nomeClasse;
+            else
+                return nomeClasse;
+        }
+        private string pegarTiposGenericos()
+        {
+            var tipo = typeof(T);
             var argumentosGenericos = tipo.GetGenericArguments();
             if (argumentosGenericos.Length == 0)
                 return "";
@@ -101,21 +113,9 @@ namespace EngineSimulacao.Api
             saida = saida + " >";
             return saida;
         }
-
         private string gerarNomeHistorico()
         {
-            var tipo = typeof(T);
-            var tipoBase = tipo.BaseType;
-
-            var nomeClasse = tipo.Name;
-            var nomeClasseBase = tipoBase.Name;
-
-            string genericos = pegarTiposGenericos(tipo);
-
-            if (nomeClasseBase != "Object")
-                return nomeClasseBase + " " + nomeClasse + " " + genericos;
-            else
-                return nomeClasse + " " + genericos;
+            return pegarNomeSemGenericos() + pegarTiposGenericos();
         }
     }
 }
