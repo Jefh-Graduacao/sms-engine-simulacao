@@ -1,8 +1,8 @@
 namespace EngineSimulacao.Api
 {
-    public abstract class Entidade : Gerenciado
+    public abstract class EntidadeGerenciada : Gerenciado
     {
-        protected Entidade()
+        protected EntidadeGerenciada()
         { 
             this._nascerEmTodosOsNiveis();
         }

@@ -1,8 +1,8 @@
 namespace EngineSimulacao.Api
 {
-    public abstract class Evento : Gerenciado
+    public abstract class EventoGerenciado : Gerenciado
     {
-        protected Evento()
+        protected EventoGerenciado()
         {
             this._nascerEmTodosOsNiveis();
         }

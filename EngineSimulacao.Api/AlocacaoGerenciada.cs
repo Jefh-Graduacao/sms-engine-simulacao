@@ -1,10 +1,10 @@
 namespace EngineSimulacao.Api
 {
-    public class Alocacao<T> : Gerenciado where T : Recurso, new()
+    public class AlocacaoGerenciada<T> : Gerenciado where T : RecursoGerenciado, new()
     {
         public T Recurso { get; }
 
-        public Alocacao(T recurso)
+        public AlocacaoGerenciada(T recurso)
         {
             this._nascerEmTodosOsNiveis();
             Recurso = recurso;

@@ -1,10 +1,10 @@
 ﻿namespace EngineSimulacao.Api
 {
-    public class Recurso : Gerenciado
+    public class RecursoGerenciado : Gerenciado
     {
         public bool Alocado { get; set; } = false;
 
-        public Recurso()
+        public RecursoGerenciado()
         {
             this._nascerEmTodosOsNiveis();
         }

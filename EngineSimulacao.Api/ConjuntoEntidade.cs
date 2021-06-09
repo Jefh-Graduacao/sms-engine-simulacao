@@ -10,7 +10,7 @@ namespace EngineSimulacao.Api
         Prioridade
     }
 
-    public class ConjuntoEntidade<TEntidade> where TEntidade : Entidade
+    public class ConjuntoEntidade<TEntidade> where TEntidade : EntidadeGerenciada
     {
         private readonly Historico<TEntidade> _historico;
         private List<TEntidade> _entidadesAtuais = new();

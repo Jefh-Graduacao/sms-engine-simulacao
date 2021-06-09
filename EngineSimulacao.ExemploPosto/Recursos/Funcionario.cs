@@ -2,7 +2,7 @@ using EngineSimulacao.Api;
 
 namespace EngineSimulacao.ExemploPosto.Recursos
 {
-    public class Funcionario : Recurso
+    public class Funcionario : RecursoGerenciado
     {
         public Funcionario(){}
     }

@@ -3,7 +3,7 @@ using EngineSimulacao.ExemploPosto.Recursos;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class IniciarServico : Evento
+    public sealed class IniciarServico : EventoGerenciado
     {
         public IniciarServico(){}
         protected override void Estrategia()

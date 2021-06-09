@@ -3,7 +3,7 @@ using EngineSimulacao.ExemploPosto.Entidades;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class ChegadaCarros : Evento
+    public sealed class ChegadaCarros : EventoGerenciado
     {
         public ChegadaCarros(){}
 

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.ExemploPosto.Eventos
 {
-    public sealed class FinalizarServico : Evento
+    public sealed class FinalizarServico : EventoGerenciado
     {
         private readonly Carro _carro;
-        private readonly List<Alocacao<Funcionario>> _funcionariosAlocados;
+        private readonly List<AlocacaoGerenciada<Funcionario>> _funcionariosAlocados;
 
-        public FinalizarServico(Carro carro, List<Alocacao<Funcionario>> funcionariosAlocados)
+        public FinalizarServico(Carro carro, List<AlocacaoGerenciada<Funcionario>> funcionariosAlocados)
         {
             _carro = carro;
             _funcionariosAlocados = funcionariosAlocados;

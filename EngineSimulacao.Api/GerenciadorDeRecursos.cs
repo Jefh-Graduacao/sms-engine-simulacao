@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
 {
-    public static class GerenciadorDeRecursos<TRecurso> where TRecurso : Recurso, new()
+    public static class GerenciadorDeRecursos<TRecurso> where TRecurso : RecursoGerenciado, new()
     {
         public static void CriarRecursos(int quantidade)
         {
@@ -31,24 +31,24 @@ namespace EngineSimulacao.Api
             return recursosLivres.Count >= quantidade;
         }
 
-        public static List<Alocacao<TRecurso>> Alocar(int quantidade)
+        public static List<AlocacaoGerenciada<TRecurso>> Alocar(int quantidade)
         {
             List<TRecurso> recursosLivres = _listarRecursosLivres();
 
             if (recursosLivres.Count < quantidade)
                 throw new Exception("Não existem recursos livres suficientes");
 
-            List<Alocacao<TRecurso>> novasAlocacoes = new();
+            List<AlocacaoGerenciada<TRecurso>> novasAlocacoes = new();
             for (int i = 0; i < quantidade; i++)
             {
-                var novaAlocacao = new Alocacao<TRecurso>(recursosLivres[i]);
+                var novaAlocacao = new AlocacaoGerenciada<TRecurso>(recursosLivres[i]);
                 novasAlocacoes.Add(novaAlocacao);
             }
 
             return novasAlocacoes;
         }
 
-        public static void Liberar(List<Alocacao<TRecurso>> listaAlocacao)
+        public static void Liberar(List<AlocacaoGerenciada<TRecurso>> listaAlocacao)
         {
             foreach (var alocacao in listaAlocacao)
             {
