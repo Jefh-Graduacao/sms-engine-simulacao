@@ -3,7 +3,7 @@ using EngineSimulacao.Restaurante.Entidades;
 
 namespace EngineSimulacao.Restaurante.Eventos.Clientes
 {
-    public sealed class ChegadaClientes : Evento
+    public sealed class ChegadaClientes : EventoGerenciado
     {
         protected override void Estrategia()
         {
@@ -11,13 +11,6 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
                 MotorRestaurante.FilaCaixa1.Adicionar(new GrupoClientes());
             else
                 MotorRestaurante.FilaCaixa2.Adicionar(new GrupoClientes());
-
-
-        }
-
-        protected override void Destruir()
-        {
-            Gerenciador<ChegadaClientes>.morte(this);
         }
     }
 }

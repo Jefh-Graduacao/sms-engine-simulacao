@@ -3,7 +3,7 @@ using System;
 
 namespace EngineSimulacao.Restaurante.Entidades
 {
-    public sealed class GrupoClientes : Entidade
+    public sealed class GrupoClientes : EntidadeGerenciada
     {
         private readonly Random _random = new();
 
@@ -12,11 +12,6 @@ namespace EngineSimulacao.Restaurante.Entidades
         public GrupoClientes()
         {
             Quantidade = _random.Next(1, 4);
-        }
-
-        protected override void DestruirInstancia()
-        {
-            throw new NotImplementedException();
         }
     }
 }

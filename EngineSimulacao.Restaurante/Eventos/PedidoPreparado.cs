@@ -2,16 +2,19 @@
 using EngineSimulacao.Restaurante.Recursos;
 using System;
 using System.Collections.Generic;
+using EngineSimulacao.Restaurante.Entidades;
 
 namespace EngineSimulacao.Restaurante.Eventos
 {
-    public sealed class PedidoPreparado : Evento
+    public sealed class PedidoPreparado : EventoGerenciado
     {
-        private readonly List<Alocacao<Cozinheiro>> _cozinheiros;
+        private readonly List<AlocacaoGerenciada<Cozinheiro>> _cozinheiros;
+        private readonly Pedido _pedido;
 
-        public PedidoPreparado(List<Alocacao<Cozinheiro>> cozinheiros)
+        public PedidoPreparado(List<AlocacaoGerenciada<Cozinheiro>> cozinheiros, Pedido pedido)
         {
             _cozinheiros = cozinheiros;
+            _pedido = pedido;
         }
 
         protected override void Estrategia()
@@ -19,11 +22,6 @@ namespace EngineSimulacao.Restaurante.Eventos
             GerenciadorDeRecursos<Cozinheiro>.Liberar(_cozinheiros);
 
             // Adiciona na fila de entregas 
-        }
-
-        protected override void Destruir()
-        {
-            throw new NotImplementedException();
         }
     }
 }

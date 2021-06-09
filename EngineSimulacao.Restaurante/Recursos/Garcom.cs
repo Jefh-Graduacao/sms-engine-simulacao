@@ -2,7 +2,7 @@
 
 namespace EngineSimulacao.Restaurante.Recursos
 {
-    public sealed class Garcom : Recurso
+    public sealed class Garcom : RecursoGerenciado
     {
         
     }

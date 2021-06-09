@@ -4,7 +4,7 @@ using System;
 
 namespace EngineSimulacao.Restaurante.Eventos
 {
-    public sealed class EnviarPedidoParaCozinha : Evento
+    public sealed class EnviarPedidoParaCozinha : EventoGerenciado
     {
         protected override void Estrategia()
         {
@@ -17,11 +17,6 @@ namespace EngineSimulacao.Restaurante.Eventos
             var pedido = MotorRestaurante.FilaPedidosCozinha.Remover();
 
             Agendador.AgendarEm(new PedidoPreparado(cozinheiro, pedido), 14); // normal (14, 5)
-        }
-
-        protected override void Destruir()
-        {
-            throw new NotImplementedException();
         }
     }
 }

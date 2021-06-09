@@ -4,7 +4,7 @@ using System;
 
 namespace EngineSimulacao.Restaurante.Eventos
 {
-    public sealed class AtenderCaixa1 : Evento
+    public sealed class AtenderCaixa1 : EventoGerenciado
     {
         protected override void Estrategia()
         {
@@ -17,7 +17,7 @@ namespace EngineSimulacao.Restaurante.Eventos
             switch (clientes.Quantidade)
             {
                 case 1:
-                    Agendador.AgendarAgora(new IrParaBalcao());
+                    Agendador.AgendarAgora(new IrParaBalcao(clientes));
                     break;
                 case 2:
                     //Agendador.AgendarAgora(new IrParaMesas2Lugares());
@@ -26,11 +26,6 @@ namespace EngineSimulacao.Restaurante.Eventos
                     //Agendador.AgendarAgora(new IrParaMesas4Lugares());
                     break;
             }
-        }
-
-        protected override void Destruir()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace EngineSimulacao.Restaurante.Recursos
 {
-    public sealed class Mesa4Lugares : Recurso
+    public sealed class Mesa4Lugares : RecursoGerenciado
     {
     }
 }

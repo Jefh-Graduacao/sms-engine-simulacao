@@ -2,7 +2,7 @@
 
 namespace EngineSimulacao.Restaurante.Recursos
 {
-    public sealed class BancoBalcao : Recurso
+    public sealed class BancoBalcao : RecursoGerenciado
     {
     }
 }

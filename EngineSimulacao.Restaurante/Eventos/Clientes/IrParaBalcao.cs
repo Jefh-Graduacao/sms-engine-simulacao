@@ -5,7 +5,7 @@ using System;
 
 namespace EngineSimulacao.Restaurante.Eventos.Clientes
 {
-    public sealed class IrParaBalcao : Evento
+    public sealed class IrParaBalcao : EventoGerenciado
     {
         private readonly GrupoClientes _clientes;
 
@@ -23,11 +23,6 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
             }
 
             GerenciadorDeRecursos<BancoBalcao>.Alocar(1);
-        }
-
-        protected override void Destruir()
-        {
-            throw new NotImplementedException();
         }
     }
 }

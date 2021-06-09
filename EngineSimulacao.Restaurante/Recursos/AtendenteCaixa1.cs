@@ -2,7 +2,7 @@
 
 namespace EngineSimulacao.Restaurante.Recursos
 {
-    public sealed class AtendenteCaixa1 : Recurso
+    public sealed class AtendenteCaixa1 : RecursoGerenciado
     {
 
     }
