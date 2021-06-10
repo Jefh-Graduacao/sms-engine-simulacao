@@ -17,13 +17,13 @@ namespace EngineSimulacao.ExemploPosto
             Agendador.Simular();
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
-            
-            foreach(var historico in listaHistorico)
+
+            foreach (var historico in listaHistorico)
             {
                 Console.WriteLine("\n\n------------");
-                Console.WriteLine(historico.nome + " maior tempo de vida " + historico.maiorTempoDeVida() );
-                Console.WriteLine(historico.nome + " menor tempo de vida " + historico.menorTempoDeVida() );
-                Console.WriteLine(historico.nome + " tempo médio de vida " + historico.tempoMedioDeVida() );
+                Console.WriteLine(historico.nome + " maior tempo de vida " + historico.maiorTempoDeVida());
+                Console.WriteLine(historico.nome + " menor tempo de vida " + historico.menorTempoDeVida());
+                Console.WriteLine(historico.nome + " tempo médio de vida " + historico.tempoMedioDeVida());
                 Console.WriteLine("------------\n\n");
             }
         }
