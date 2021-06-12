@@ -54,5 +54,10 @@ namespace EngineSimulacao.Api
             object[] argumentos = {this};
             metodo.Invoke(null, argumentos);
         }
+
+        public override string ToString()
+        {
+            return base.ToString() + "." + Id;
+        }
     }
 }
