@@ -22,20 +22,41 @@ namespace EngineSimulacao.Api
         {
             init(nome);
         }
-
+        
+        /// <summary>
+        /// Aponta qual o maior número de vezes que uma instância pode passar pelo histórico
+        /// </summary>
+        private int maiorNumeroDePassagensPermitidas = int.MaxValue;
         public List<InfoInstancia<T>> lista { get; private set; } = new();
 
         public void nascimento(T instancia)
         {
-            var info = new InfoInstancia<T>(instancia);
-            info.Viver();
-            lista.Add(info);
+            var reviveu = reviver(instancia);
+
+            if(false == reviveu){
+                var info = new InfoInstancia<T>(instancia, this);
+                info.pilhaViver();
+                lista.Add(info);
+            }
+        }
+        private bool reviver(T instancia)
+        {
+            InfoInstancia<T> infoExistente = lista.Find(info => info.Instancia.Id == instancia.Id);
+            if(infoExistente == null) {
+                return false;
+            }
+            
+            if(infoExistente.pilhaDePassagens.Count >= maiorNumeroDePassagensPermitidas){
+                throw new Exception("Instancia " + instancia + " já utilizou sua quantidade de passagens permitidas no histórico " + nome);
+            }
+            infoExistente.pilhaViver();
+            return true;
         }
 
         public void morte(T instanciaMorta)
         {
             var infoInstanciaDestruida = lista.Find(info => info.Instancia.Id == instanciaMorta.Id);
-            infoInstanciaDestruida.Morrer();
+            infoInstanciaDestruida.pilhaMorrer();
         }
 
         public List<InfoInstancia<T>> listarVivos()
@@ -47,38 +68,31 @@ namespace EngineSimulacao.Api
         {
             return lista.FindAll(Info => false == Info.Vivo);
         }
-
-        public override int menorTempoDeVida()
+        private List<Passagem> pegarTodasPassagens()
         {
-            if (lista.Count == 0) return 0;
-            int menor = lista[0].TempoDeVida;
+            List<Passagem> todasPassagens = new();
             foreach (var Info in lista)
             {
-                if (Info.TempoDeVida < menor) menor = Info.TempoDeVida;
+                todasPassagens.AddRange(Info.pilhaDePassagens);
             }
-            return menor;
+            return todasPassagens;
+        }
+        public override int menorTempoDeVida()
+        {
+            List<Passagem> todasPassagens = this.pegarTodasPassagens();
+            return ColetaDeDados.menorTempoDeVida(todasPassagens);
         }
 
         public override double tempoMedioDeVida()
         {
-            if (lista.Count == 0) return 0;
-            double soma = 0;
-            foreach (var Info in lista)
-            {
-                soma += Info.TempoDeVida;
-            }
-            return soma / lista.Count;
+            List<Passagem> todasPassagens = this.pegarTodasPassagens();
+            return ColetaDeDados.tempoMedioDeVida(todasPassagens);
         }
 
         public override int maiorTempoDeVida()
         {
-            if (lista.Count == 0) return 0;
-            int maior = lista[0].TempoDeVida;
-            foreach (var Info in lista)
-            {
-                if (Info.TempoDeVida > maior) maior = Info.TempoDeVida;
-            }
-            return maior;
+            List<Passagem> todasPassagens = this.pegarTodasPassagens();
+            return ColetaDeDados.maiorTempoDeVida(todasPassagens);
         }
         private void init(string nome)
         {
