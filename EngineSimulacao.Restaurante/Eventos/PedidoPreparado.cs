@@ -1,27 +1,29 @@
 ﻿using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Recursos;
-using System;
 using System.Collections.Generic;
 using EngineSimulacao.Restaurante.Entidades;
+using EngineSimulacao.Restaurante.Eventos.Clientes;
 
 namespace EngineSimulacao.Restaurante.Eventos
 {
     public sealed class PedidoPreparado : EventoGerenciado
     {
-        private readonly List<AlocacaoGerenciada<Cozinheiro>> _cozinheiros;
-        private readonly Pedido _pedido;
+        private readonly IEnumerable<IAlocacaoGerenciada<Cozinheiro>> _cozinheiros;
+        private readonly GrupoClientes _clientes;
 
-        public PedidoPreparado(List<AlocacaoGerenciada<Cozinheiro>> cozinheiros, Pedido pedido)
+        public PedidoPreparado(IEnumerable<IAlocacaoGerenciada<Cozinheiro>> cozinheiros, GrupoClientes clientes)
         {
             _cozinheiros = cozinheiros;
-            _pedido = pedido;
+            _clientes = clientes;
         }
 
         protected override void Estrategia()
         {
             GerenciadorDeRecursos<Cozinheiro>.Liberar(_cozinheiros);
-
-            // Adiciona na fila de entregas 
+            _clientes.Pedido.ProntroParaComer = true;
+            if(null != _clientes.LugarOcupado){
+                Agendador.AgendarAgora(new ComecarAComer(_clientes));
+            }
         }
     }
 }

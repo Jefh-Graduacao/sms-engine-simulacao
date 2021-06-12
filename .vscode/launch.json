@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/EngineSimulacao.ExemploPosto/bin/Debug/net6.0/EngineSimulacao.ExemploPosto.dll",
+            "program": "${workspaceFolder}/EngineSimulacao.Restaurante/bin/Debug/net6.0/EngineSimulacao.Restaurante.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/EngineSimulacao.ExemploPosto",
+            "cwd": "${workspaceFolder}/EngineSimulacao.Restaurante",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

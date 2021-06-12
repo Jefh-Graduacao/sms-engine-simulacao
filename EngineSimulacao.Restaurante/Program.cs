@@ -1,5 +1,6 @@
-﻿using EngineSimulacao.Api;
-using EngineSimulacao.Restaurante.Eventos;
+﻿using System;
+using System.Collections.Generic;
+using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
 
 namespace EngineSimulacao.Restaurante
@@ -13,6 +14,17 @@ namespace EngineSimulacao.Restaurante
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
             Agendador.Simular();
+
+            List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
+
+            foreach (var historico in listaHistorico)
+            {
+                Console.WriteLine("\n\n------------");
+                Console.WriteLine(historico.nome + " maior tempo de vida " + historico.maiorTempoDeVida());
+                Console.WriteLine(historico.nome + " menor tempo de vida " + historico.menorTempoDeVida());
+                Console.WriteLine(historico.nome + " tempo médio de vida " + historico.tempoMedioDeVida());
+                Console.WriteLine("------------\n\n");
+            }
         }
     }
 }

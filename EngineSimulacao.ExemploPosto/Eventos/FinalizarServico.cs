@@ -8,9 +8,9 @@ namespace EngineSimulacao.ExemploPosto.Eventos
     public sealed class FinalizarServico : EventoGerenciado
     {
         private readonly Carro _carro;
-        private readonly List<AlocacaoGerenciada<Funcionario>> _funcionariosAlocados;
+        private readonly IEnumerable<IAlocacaoGerenciada<Funcionario>> _funcionariosAlocados;
 
-        public FinalizarServico(Carro carro, List<AlocacaoGerenciada<Funcionario>> funcionariosAlocados)
+        public FinalizarServico(Carro carro, IEnumerable<IAlocacaoGerenciada<Funcionario>> funcionariosAlocados)
         {
             _carro = carro;
             _funcionariosAlocados = funcionariosAlocados;

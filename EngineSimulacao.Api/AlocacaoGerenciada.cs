@@ -1,6 +1,12 @@
 namespace EngineSimulacao.Api
 {
-    public class AlocacaoGerenciada<T> : Gerenciado where T : RecursoGerenciado, new()
+    public interface IAlocacaoGerenciada<out T> where T : RecursoGerenciado, new()
+    {
+        T Recurso { get; }
+        void Desalocar();
+    }
+
+    public class AlocacaoGerenciada<T> : Gerenciado, IAlocacaoGerenciada<T> where T : RecursoGerenciado, new()
     {
         public T Recurso { get; }
 

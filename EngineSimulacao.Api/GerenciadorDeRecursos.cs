@@ -31,14 +31,14 @@ namespace EngineSimulacao.Api
             return recursosLivres.Count >= quantidade;
         }
 
-        public static List<AlocacaoGerenciada<TRecurso>> Alocar(int quantidade)
+        public static IEnumerable<IAlocacaoGerenciada<TRecurso>> Alocar(int quantidade)
         {
             List<TRecurso> recursosLivres = _listarRecursosLivres();
 
             if (recursosLivres.Count < quantidade)
                 throw new Exception("Não existem recursos livres suficientes");
 
-            List<AlocacaoGerenciada<TRecurso>> novasAlocacoes = new();
+            List<IAlocacaoGerenciada<TRecurso>> novasAlocacoes = new();
             for (int i = 0; i < quantidade; i++)
             {
                 var novaAlocacao = new AlocacaoGerenciada<TRecurso>(recursosLivres[i]);
@@ -48,7 +48,7 @@ namespace EngineSimulacao.Api
             return novasAlocacoes;
         }
 
-        public static void Liberar(List<AlocacaoGerenciada<TRecurso>> listaAlocacao)
+        public static void Liberar(IEnumerable<IAlocacaoGerenciada<TRecurso>> listaAlocacao)
         {
             foreach (var alocacao in listaAlocacao)
             {

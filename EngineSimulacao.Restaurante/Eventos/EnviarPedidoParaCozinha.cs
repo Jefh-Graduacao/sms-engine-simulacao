@@ -1,6 +1,5 @@
 ﻿using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Recursos;
-using System;
 
 namespace EngineSimulacao.Restaurante.Eventos
 {
@@ -13,10 +12,10 @@ namespace EngineSimulacao.Restaurante.Eventos
             if (!GerenciadorDeRecursos<Cozinheiro>.VerificarDisponibilidade(qtdCozinheirosNecessarios))
                 return;
 
-            var cozinheiro = GerenciadorDeRecursos<Cozinheiro>.Alocar(qtdCozinheirosNecessarios);
-            var pedido = MotorRestaurante.FilaPedidosCozinha.Remover();
+            var cliente = MotorRestaurante.FilaPedidosCozinha.Remover();
+            var cozinheiros = GerenciadorDeRecursos<Cozinheiro>.Alocar(qtdCozinheirosNecessarios);
 
-            Agendador.AgendarEm(new PedidoPreparado(cozinheiro, pedido), 14); // normal (14, 5)
+            Agendador.AgendarEm(new PedidoPreparado(cozinheiros, cliente), 14); // normal (14, 5)
         }
     }
 }
