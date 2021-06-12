@@ -7,8 +7,8 @@ namespace EngineSimulacao.Api
         /// <summary>
         /// FEL - Future Event List
         /// </summary>
-        private static readonly PriorityQueue<EventoGerenciado, int> _listaEventosFuturos = new();
-        public static int Tempo { get; private set; }
+        private static readonly PriorityQueue<EventoGerenciado, double> _listaEventosFuturos = new();
+        public static double Tempo { get; private set; }
 
         public static void SimularUmaExecucao()
         {
@@ -27,7 +27,7 @@ namespace EngineSimulacao.Api
             }
         }
 
-        private static void AgendarEvento(EventoGerenciado evento, int tempoSelecionado)
+        private static void AgendarEvento(EventoGerenciado evento, double tempoSelecionado)
         {
             _listaEventosFuturos.Enqueue(evento, tempoSelecionado);
         }
@@ -37,12 +37,12 @@ namespace EngineSimulacao.Api
             AgendarEvento(evento, Tempo);
         }
 
-        public static void AgendarEm(EventoGerenciado evento, int tempoAdicionar)
+        public static void AgendarEm(EventoGerenciado evento, double tempoAdicionar)
         {
             AgendarEvento(evento, Tempo + tempoAdicionar);
         }
 
-        public static void AgendarComTempoAbsoluto(EventoGerenciado evento, int tempoAbsoluto)
+        public static void AgendarComTempoAbsoluto(EventoGerenciado evento, double tempoAbsoluto)
         {
             AgendarEvento(evento, tempoAbsoluto);
         }

@@ -5,9 +5,9 @@ namespace EngineSimulacao.Api
         public T Instancia { set; get; }
         public bool Vivo { set; get; }
         public int Prioridade { set; get; }
-        public int TempoCriacao { set; get; }
-        public int TempoDestruicao { set; get; } = int.MinValue;
-        public int TempoDeVida => Vivo ? Agendador.Tempo - TempoCriacao : TempoDestruicao - TempoCriacao;
+        public double TempoCriacao { set; get; }
+        public double TempoDestruicao { set; get; } = int.MinValue;
+        public double TempoDeVida => Vivo ? Agendador.Tempo - TempoCriacao : TempoDestruicao - TempoCriacao;
 
         public InfoInstancia(T instancia)
         {

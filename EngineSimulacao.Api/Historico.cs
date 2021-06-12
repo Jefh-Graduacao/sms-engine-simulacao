@@ -6,9 +6,9 @@ namespace EngineSimulacao.Api
     public abstract class HistoricoBase
     {
         public string nome { get; protected set; }
-        public abstract int menorTempoDeVida();
+        public abstract double menorTempoDeVida();
         public abstract double tempoMedioDeVida();
-        public abstract int maiorTempoDeVida();
+        public abstract double maiorTempoDeVida();
     }
 
     public class Historico<T> : HistoricoBase where T : notnull, Gerenciado
@@ -48,10 +48,10 @@ namespace EngineSimulacao.Api
             return lista.FindAll(Info => false == Info.Vivo);
         }
 
-        public override int menorTempoDeVida()
+        public override double menorTempoDeVida()
         {
             if (lista.Count == 0) return 0;
-            int menor = lista[0].TempoDeVida;
+            double menor = lista[0].TempoDeVida;
             foreach (var Info in lista)
             {
                 if (Info.TempoDeVida < menor) menor = Info.TempoDeVida;
@@ -70,10 +70,10 @@ namespace EngineSimulacao.Api
             return soma / lista.Count;
         }
 
-        public override int maiorTempoDeVida()
+        public override double maiorTempoDeVida()
         {
             if (lista.Count == 0) return 0;
-            int maior = lista[0].TempoDeVida;
+            double maior = lista[0].TempoDeVida;
             foreach (var Info in lista)
             {
                 if (Info.TempoDeVida > maior) maior = Info.TempoDeVida;
