@@ -42,14 +42,15 @@ namespace EngineSimulacao.Api
         private bool reviver(T instancia)
         {
             InfoInstancia<T> infoExistente = lista.Find(info => info.Instancia.Id == instancia.Id);
-            if(infoExistente != null){
-                if(infoExistente.pilhaDePassagens.Count >= maiorNumeroDePassagensPermitidas){
-                    throw new Exception("Instancia " + instancia + " já utilizou sua quantidade de passagens permitidas no histórico " + nome);
-                }
-                infoExistente.pilhaViver();
-                return true;
+            if(infoExistente == null) {
+                return false;
             }
-            return false;
+            
+            if(infoExistente.pilhaDePassagens.Count >= maiorNumeroDePassagensPermitidas){
+                throw new Exception("Instancia " + instancia + " já utilizou sua quantidade de passagens permitidas no histórico " + nome);
+            }
+            infoExistente.pilhaViver();
+            return true;
         }
 
         public void morte(T instanciaMorta)
