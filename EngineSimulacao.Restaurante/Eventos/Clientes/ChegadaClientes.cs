@@ -12,7 +12,8 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
                 MotorRestaurante.FilaCaixa1.Adicionar(new GrupoClientes());
                 var evtIniciarCaixa1 = new IniciarAtendimentoCaixa(1);
                 Agendador.AgendarAgora(evtIniciarCaixa1);
-            } else 
+            }
+            else
             {
                 MotorRestaurante.FilaCaixa2.Adicionar(new GrupoClientes());
                 var evtIniciarCaixa2 = new IniciarAtendimentoCaixa(2);

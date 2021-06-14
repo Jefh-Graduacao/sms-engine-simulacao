@@ -4,6 +4,6 @@ namespace EngineSimulacao.ExemploPosto.Recursos
 {
     public class Funcionario : RecursoGerenciado
     {
-        public Funcionario(){}
+        public Funcionario() { }
     }
 }

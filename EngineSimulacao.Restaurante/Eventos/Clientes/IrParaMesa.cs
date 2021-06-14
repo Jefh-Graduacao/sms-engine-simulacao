@@ -1,29 +1,29 @@
-﻿using System.Collections.Generic;
-using EngineSimulacao.Api;
+﻿using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Entidades;
 using EngineSimulacao.Restaurante.Recursos;
+using System.Collections.Generic;
 
 namespace EngineSimulacao.Restaurante.Eventos.Clientes
 {
     public sealed class IrParaMesa : EventoGerenciado
     {
         private int _quantidadeLugares;
-        
+
         public IrParaMesa(int quantidadeLugares)
         {
             _quantidadeLugares = quantidadeLugares;
         }
         protected override void Estrategia()
-        {   
-            if(!VerificarFila())             return;
+        {
+            if (!VerificarFila()) return;
 
-            if(!VerificarDisponibilidade(1)) return;
+            if (!VerificarDisponibilidade(1)) return;
 
             var clientes = RemoverDaFilaAdequada();
 
             clientes.LugarOcupado = AlocarMesa(1);
-            
-            if(clientes.Pedido.ProntroParaComer)
+
+            if (clientes.Pedido.ProntroParaComer)
             {
                 Agendador.AgendarAgora(new ComecarAComer(clientes));
             }

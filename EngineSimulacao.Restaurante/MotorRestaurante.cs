@@ -8,7 +8,7 @@ namespace EngineSimulacao.Restaurante
     {
         public static readonly ConjuntoEntidade<GrupoClientes> FilaCaixa1 = new("Fila Caixa 1");
         public static readonly ConjuntoEntidade<GrupoClientes> FilaCaixa2 = new("Fila Caixa 2");
-        
+
         public static readonly ConjuntoEntidade<GrupoClientes> FilaPedidosCozinha = new("Fila Pedidos Cozinha");
         public static readonly ConjuntoEntidade<Pedido> FilaEntrega = new("Fila de Pedidos para Entrega");
 

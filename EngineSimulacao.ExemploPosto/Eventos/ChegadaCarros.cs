@@ -5,7 +5,7 @@ namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class ChegadaCarros : EventoGerenciado
     {
-        public ChegadaCarros(){}
+        public ChegadaCarros() { }
 
         protected override void Estrategia()
         {

@@ -8,13 +8,14 @@ namespace EngineSimulacao.Restaurante.Eventos
     {
         private int _caixa;
         private GrupoClientes _clientes;
-        public FinalizarAtendimentoCaixa(int caixa, GrupoClientes clientes){
+        public FinalizarAtendimentoCaixa(int caixa, GrupoClientes clientes)
+        {
             _caixa = caixa;
             _clientes = clientes;
         }
         public GrupoClientes RemoverDaFilaAdequada()
         {
-            if(_caixa == 1)
+            if (_caixa == 1)
                 return MotorRestaurante.FilaCaixa1.Remover();
             else
                 return MotorRestaurante.FilaCaixa2.Remover();

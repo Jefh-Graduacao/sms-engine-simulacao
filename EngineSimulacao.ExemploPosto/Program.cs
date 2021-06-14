@@ -1,8 +1,8 @@
 ﻿using EngineSimulacao.Api;
 using EngineSimulacao.ExemploPosto.Eventos;
+using EngineSimulacao.ExemploPosto.Recursos;
 using System;
 using System.Collections.Generic;
-using EngineSimulacao.ExemploPosto.Recursos;
 
 namespace EngineSimulacao.ExemploPosto
 {

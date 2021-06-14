@@ -14,7 +14,7 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
 
         protected override void Estrategia()
         {
-            foreach(var banco in _clientes.LugarOcupado)
+            foreach (var banco in _clientes.LugarOcupado)
                 banco.Desalocar();
 
             Agendador.AgendarAgora(new IrParaMesa(_clientes.Quantidade));

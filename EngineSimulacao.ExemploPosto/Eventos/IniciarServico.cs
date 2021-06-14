@@ -5,7 +5,7 @@ namespace EngineSimulacao.ExemploPosto.Eventos
 {
     public sealed class IniciarServico : EventoGerenciado
     {
-        public IniciarServico(){}
+        public IniciarServico() { }
         protected override void Estrategia()
         {
             if (!GerenciadorDeRecursos<Funcionario>.VerificarDisponibilidade(MotorPosto.FuncionariosNecessarios))

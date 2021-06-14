@@ -1,8 +1,8 @@
 ﻿using EngineSimulacao.Api;
-using EngineSimulacao.Restaurante.Recursos;
-using System.Collections.Generic;
 using EngineSimulacao.Restaurante.Entidades;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
+using EngineSimulacao.Restaurante.Recursos;
+using System.Collections.Generic;
 
 namespace EngineSimulacao.Restaurante.Eventos
 {
@@ -21,7 +21,8 @@ namespace EngineSimulacao.Restaurante.Eventos
         {
             GerenciadorDeRecursos<Cozinheiro>.Liberar(_cozinheiros);
             _clientes.Pedido.ProntroParaComer = true;
-            if(null != _clientes.LugarOcupado){
+            if (null != _clientes.LugarOcupado)
+            {
                 Agendador.AgendarAgora(new ComecarAComer(_clientes));
             }
         }

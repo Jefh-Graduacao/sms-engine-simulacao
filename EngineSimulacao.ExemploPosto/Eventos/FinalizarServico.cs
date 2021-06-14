@@ -16,10 +16,10 @@ namespace EngineSimulacao.ExemploPosto.Eventos
             _funcionariosAlocados = funcionariosAlocados;
         }
 
-        protected override void Estrategia() 
+        protected override void Estrategia()
         {
             _carro.Destruir();
-            
+
             GerenciadorDeRecursos<Funcionario>.Liberar(_funcionariosAlocados);
 
             if (MotorPosto.FilaAtendimento.TamanhoAtual > 0)

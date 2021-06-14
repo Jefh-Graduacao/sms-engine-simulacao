@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using EngineSimulacao.Api;
+﻿using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
+using System;
+using System.Collections.Generic;
 
 namespace EngineSimulacao.Restaurante
 {

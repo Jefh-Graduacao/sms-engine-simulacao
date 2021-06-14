@@ -1,5 +1,4 @@
 ﻿using EngineSimulacao.Api;
-using EngineSimulacao.Restaurante.Recursos;
 using System;
 using System.Collections.Generic;
 

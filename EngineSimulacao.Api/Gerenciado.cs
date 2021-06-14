@@ -22,10 +22,12 @@ namespace EngineSimulacao.Api
         /// Adiciona info da da criação da instância no histórico 
         /// de sua classe, e de todas as classes que herda
         /// </summary>
-        protected void _nascerEmTodosOsNiveis(){
+        protected void _nascerEmTodosOsNiveis()
+        {
             Type tipoAtual = this.GetType();
 
-            while(tipoAtual.Name != Gerenciado.NomeTipo){
+            while (tipoAtual.Name != Gerenciado.NomeTipo)
+            {
                 this.chamarGerenciadorDoTipo(tipoAtual, "nascimento");
                 tipoAtual = tipoAtual.BaseType;
             }
@@ -34,10 +36,12 @@ namespace EngineSimulacao.Api
         /// Adiciona info da destruição da instância no histórico 
         /// de sua classe, e de todas as classes que herda
         /// </summary>
-        protected void _morrerEmTodosOsNiveis(){
+        protected void _morrerEmTodosOsNiveis()
+        {
             Type tipoAtual = this.GetType();
 
-            while(tipoAtual.Name != "Gerenciado"){
+            while (tipoAtual.Name != "Gerenciado")
+            {
                 this.chamarGerenciadorDoTipo(tipoAtual, "morte");
                 tipoAtual = tipoAtual.BaseType;
             }
@@ -48,10 +52,11 @@ namespace EngineSimulacao.Api
         ///     Gerenciador<tipo>.nomeMetodo(this);
         ///
         /// </summary>
-        private void chamarGerenciadorDoTipo(Type tipo, string nomeMetodo){
+        private void chamarGerenciadorDoTipo(Type tipo, string nomeMetodo)
+        {
             var gerenciadorDoTipo = typeof(Gerenciador<>).MakeGenericType(tipo);
             MethodInfo metodo = gerenciadorDoTipo.GetMethod(nomeMetodo);
-            object[] argumentos = {this};
+            object[] argumentos = { this };
             metodo.Invoke(null, argumentos);
         }
     }
