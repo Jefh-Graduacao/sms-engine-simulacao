@@ -9,4 +9,8 @@
     <ProjectReference Include="..\EngineSimulacao.Api\EngineSimulacao.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RedesPetri" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>
