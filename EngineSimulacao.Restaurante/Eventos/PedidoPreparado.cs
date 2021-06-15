@@ -1,6 +1,5 @@
 ﻿using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Entidades;
-using EngineSimulacao.Restaurante.Eventos.Clientes;
 using EngineSimulacao.Restaurante.Recursos;
 using System.Collections.Generic;
 
@@ -23,7 +22,9 @@ namespace EngineSimulacao.Restaurante.Eventos
             _clientes.Pedido.ProntroParaComer = true;
             if (null != _clientes.LugarOcupado)
             {
-                Agendador.AgendarAgora(new ComecarAComer(_clientes));
+                MotorRestaurante.FilaEntrega.Adicionar(_clientes);
+
+                MotorRestaurante.garcom.PedidoPronto.ProduzirMarcas(1);
             }
         }
     }

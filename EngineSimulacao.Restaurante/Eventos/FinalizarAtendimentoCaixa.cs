@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Entidades;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
@@ -8,10 +9,12 @@ namespace EngineSimulacao.Restaurante.Eventos
     {
         private int _caixa;
         private GrupoClientes _clientes;
-        public FinalizarAtendimentoCaixa(int caixa, GrupoClientes clientes)
+        IEnumerable<IAlocacaoGerenciada<RecursoGerenciado>> _atendentes;
+        public FinalizarAtendimentoCaixa(int caixa, GrupoClientes clientes, IEnumerable<IAlocacaoGerenciada<RecursoGerenciado>> atendentes)
         {
             _caixa = caixa;
             _clientes = clientes;
+            _atendentes = atendentes;
         }
         public GrupoClientes RemoverDaFilaAdequada()
         {
@@ -42,6 +45,10 @@ namespace EngineSimulacao.Restaurante.Eventos
             }
             Agendador.AgendarAgora(new IrParaMesa(_clientes.Quantidade));
             Agendador.AgendarAgora(new IniciarAtendimentoCaixa(_caixa));
+
+            foreach(var atendente in _atendentes){
+                atendente.Desalocar();
+            }
         }
     }
 }

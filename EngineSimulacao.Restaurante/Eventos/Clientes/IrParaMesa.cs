@@ -25,7 +25,9 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
 
             if (clientes.Pedido.ProntroParaComer)
             {
-                Agendador.AgendarAgora(new ComecarAComer(clientes));
+                MotorRestaurante.FilaEntrega.Adicionar(clientes);
+
+                MotorRestaurante.garcom.PedidoPronto.ProduzirMarcas(1);
             }
         }
 

@@ -13,7 +13,7 @@ namespace EngineSimulacao.Restaurante
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
-            Agendador.Simular();
+            Agendador.Simular(MotorRestaurante.garcom.Executar);
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace EngineSimulacao.Api
@@ -10,20 +11,22 @@ namespace EngineSimulacao.Api
         private static readonly PriorityQueue<EventoGerenciado, double> _listaEventosFuturos = new();
         public static double Tempo { get; private set; }
 
-        public static void SimularUmaExecucao()
+        public static void SimularUmaExecucao(Action callback = null)
         {
             _listaEventosFuturos.TryDequeue(out var evento, out var prioridade);
 
             Tempo = prioridade;
             evento.Executar();
+            callback?.Invoke();
         }
 
-        public static void Simular()
+        public static void Simular(Action callback = null)
         {
             while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
             {
                 Tempo = prioridade;
                 evento.Executar();
+                callback?.Invoke();
             }
         }
 
