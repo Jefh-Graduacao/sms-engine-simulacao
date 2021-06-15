@@ -2,6 +2,11 @@ using System;
 
 namespace EngineSimulacao.Api
 {
+    public static class GeradorRandomicoContexto
+    {
+        public static GeradorDeRandomicosLCG Gerador => new GeradorDeRandomicosLCG();
+    }
+
     public class GeradorDeRandomicosLCG
     {
         private const long m = 4294967296;
@@ -33,20 +38,20 @@ namespace EngineSimulacao.Api
             return Proximo() % ValorMáximo;
         }
 
-        public double ProximoComEscalaDe0a1(long ValorMáximo = 1000)
+        public double ProximoComEscalaDe0a1(long valorMaximo = 1000)
         {
             _penultimoGerado_0a1 = _ultimoGerado_0a1;
-            _ultimoGerado_0a1 = (Proximo() % ValorMáximo) / (ValorMáximo - 1.0);
+            _ultimoGerado_0a1 = (Proximo() % valorMaximo) / (valorMaximo - 1.0);
             return _ultimoGerado_0a1;
         }
 
-        public double exponencial(double média)
+        public double Exponencial(double média)
         {
             double x = ProximoComEscalaDe0a1();
             return -média * Math.Log(1.0 - x);
         }
 
-        public double normal(double média, double desvio)
+        public double Normal(double media, double desvio)
         {
             if (_penultimoGerado_0a1 == -999.99)
             {
@@ -63,16 +68,13 @@ namespace EngineSimulacao.Api
             {
                 double y = Math.Sqrt((-2 * Math.Log(W)) / W);
                 double x1 = y * Vi2;
-                double normal = média + desvio * x1;
+                double normal = media + desvio * x1;
                 return normal;
             }
             else
             {
-                return normal(média, desvio);
+                return Normal(media, desvio);
             }
-
         }
-
     }
-
 }
