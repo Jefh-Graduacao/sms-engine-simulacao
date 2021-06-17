@@ -15,7 +15,7 @@ namespace EngineSimulacao.Restaurante.Eventos
             var cliente = MotorRestaurante.FilaPedidosCozinha.Remover();
             var cozinheiros = GerenciadorDeRecursos<Cozinheiro>.Alocar(qtdCozinheirosNecessarios);
 
-            Agendador.AgendarEm(new PedidoPreparado(cozinheiros, cliente), 14); // normal (14, 5)
+            Agendador.AgendarEm(new PedidoPreparado(cozinheiros, cliente), MotorRestaurante.TempoPreparoPedido);
         }
     }
 }

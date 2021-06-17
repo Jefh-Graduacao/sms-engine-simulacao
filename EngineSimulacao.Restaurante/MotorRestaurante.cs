@@ -7,6 +7,7 @@ namespace EngineSimulacao.Restaurante
 {
     public static class MotorRestaurante
     {
+        // -----  FILAS -----
         public static readonly ConjuntoEntidade<GrupoClientes> FilaCaixa1 = new("Fila Caixa 1");
         public static readonly ConjuntoEntidade<GrupoClientes> FilaCaixa2 = new("Fila Caixa 2");
 
@@ -16,7 +17,18 @@ namespace EngineSimulacao.Restaurante
         public static readonly ConjuntoEntidade<GrupoClientes> FilaBalcao = new("Fila Balcão");
         public static readonly ConjuntoEntidade<GrupoClientes> FilaMesa2Lugares = new("Fila Mesas de 2 Lugares");
         public static readonly ConjuntoEntidade<GrupoClientes> FilaMesa4Lugares = new("Fila Mesas de 4 Lugares");
+
+        // ----- TEMPOS EM MINUTOS
+        public static double TempoMaximoChegadaClientes = 180.00;
+        public static double TEC_ChegadaCLientes => GeradorRandomicoContexto.Gerador.Exponencial(3);
+        public static double TempoAtendimentoCaixa => GeradorRandomicoContexto.Gerador.Normal(8, 2);
+        public static double TempoPreparoPedido => GeradorRandomicoContexto.Gerador.Normal(14, 5, 0.1, 35);
+        public static double TempoEntregaPedidoPeloGarcom => GeradorRandomicoContexto.Gerador.Normal(2, 0.3);
+        public static double TempoDeRefeição => GeradorRandomicoContexto.Gerador.Normal(20, 8, 0.1, 45);
+
+        // ------  RECURSOS -------
         public static Garcom garcom;
+
         public static void Inicializar()
         {
             GerenciadorDeRecursos<Garcom>.CriarRecursos(1);
@@ -24,7 +36,6 @@ namespace EngineSimulacao.Restaurante
 
             GerenciadorDeRecursos<AtendenteCaixa>.CriarRecursos(2);
             GerenciadorDeRecursos<Cozinheiro>.CriarRecursos(3);
-            GerenciadorDeRecursos<Garcom>.CriarRecursos(2);
 
             GerenciadorDeRecursos<BancoBalcao>.CriarRecursos(6);
             GerenciadorDeRecursos<Mesa2Lugares>.CriarRecursos(4);

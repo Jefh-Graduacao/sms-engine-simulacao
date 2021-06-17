@@ -88,7 +88,7 @@ namespace EngineSimulacao.Restaurante.Recursos
             switch(lugar.Id){
                 case 30:
                 {
-                    Agendador.AgendarEm(new FinalizarEntregaPedido(), GeradorRandomicoContexto.Gerador.Normal(2, 0.3));
+                    Agendador.AgendarEm(new FinalizarEntregaPedido(), MotorRestaurante.TempoEntregaPedidoPeloGarcom);
                     break;
                 }
                 default:

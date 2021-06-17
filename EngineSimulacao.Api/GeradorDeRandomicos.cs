@@ -53,7 +53,7 @@ namespace EngineSimulacao.Api
             return Math.Pow(-média, -1) * Math.Log(1.0 - x);
         }
 
-        public double Normal(double media, double desvio)
+        public double Normal(double media, double desvio, double min = Double.MinValue, double max = Double.MaxValue)
         {
             if (_penultimoGerado_0a1 == -999.99)
             {
@@ -71,11 +71,17 @@ namespace EngineSimulacao.Api
                 double y = Math.Sqrt((-2 * Math.Log(W)) / W);
                 double x1 = y * Vi2;
                 double normal = media + desvio * x1;
-                return normal;
+
+                if (normal > max)
+                    return max;
+                else if (normal < min)
+                    return min;
+                else
+                    return normal;
             }
             else
             {
-                return Normal(media, desvio);
+                return Normal(media, desvio, min, max);
             }
         }
 

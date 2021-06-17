@@ -35,7 +35,7 @@ namespace EngineSimulacao.Restaurante.Eventos
             
             var clientes = RemoverDaFilaAdequada();
 
-            Agendador.AgendarEm(new FinalizarAtendimentoCaixa(_caixa, clientes, atendentes), 12);
+            Agendador.AgendarEm(new FinalizarAtendimentoCaixa(_caixa, clientes, atendentes), MotorRestaurante.TempoAtendimentoCaixa);
         }
     }
 }

@@ -20,11 +20,11 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
                 Agendador.AgendarAgora(evtIniciarCaixa2);
             }
 
-            if (Agendador.Tempo >= 180)
+            if (Agendador.Tempo >= MotorRestaurante.TempoMaximoChegadaClientes)
                 return;
 
             var evtChegada = new ChegadaClientes();
-            Agendador.AgendarEm(evtChegada, 3);
+            Agendador.AgendarEm(evtChegada, MotorRestaurante.TEC_ChegadaCLientes);
         }
     }
 }

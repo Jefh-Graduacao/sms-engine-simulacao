@@ -13,7 +13,7 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
         }
         protected override void Estrategia()
         {
-            Agendador.AgendarEm(new SairDaMesa(_clientes), 28.0);
+            Agendador.AgendarEm(new SairDaMesa(_clientes), MotorRestaurante.TempoDeRefeição);
         }
     }
 }
