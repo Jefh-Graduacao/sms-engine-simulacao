@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace EngineSimulacao.Api
 {
@@ -48,7 +50,7 @@ namespace EngineSimulacao.Api
         public double Exponencial(double média)
         {
             double x = ProximoComEscalaDe0a1();
-            return -média * Math.Log(1.0 - x);
+            return Math.Pow(-média, -1) * Math.Log(1.0 - x);
         }
 
         public double Normal(double media, double desvio)
@@ -75,6 +77,27 @@ namespace EngineSimulacao.Api
             {
                 return Normal(media, desvio);
             }
+        }
+
+        public async Task testadorGeradorStremsAsync(int numeroDeAmostras = 50)
+        {
+            int s = numeroDeAmostras;
+            string[] lines = new string[s];
+
+            for (int i = 0; i < s; i++)
+            {
+                var a = GeradorRandomicoContexto.Gerador;
+                lines[i] = a.Normal(8, 2).ToString();
+            }
+            await File.WriteAllLinesAsync("normal.txt", lines);
+
+            for (int i = 0; i < s; i++)
+            {
+                var ass = GeradorRandomicoContexto.Gerador;
+                lines[i] = ass.Exponencial(3).ToString();
+            }
+            await File.WriteAllLinesAsync("exponencial.txt", lines);
+
         }
     }
 }
