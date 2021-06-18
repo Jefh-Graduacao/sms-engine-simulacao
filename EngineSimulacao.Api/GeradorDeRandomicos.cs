@@ -46,11 +46,21 @@ namespace EngineSimulacao.Api
             _ultimoGerado_0a1 = (Proximo() % valorMaximo) / (valorMaximo - 1.0);
             return _ultimoGerado_0a1;
         }
+        public long Uniforme(long min, long max)
+        {
+            long valor = Proximo(max) + 1;
+            if (valor < min)
+                return min;
+            return valor;
+        }
 
         public double Exponencial(double média)
         {
             double x = ProximoComEscalaDe0a1();
-            return Math.Pow(-média, -1) * Math.Log(1.0 - x);
+            double exponencial = Math.Pow(-média, -1) * Math.Log(1.0 - x);
+            if (exponencial > double.MaxValue)
+                return Exponencial(média);
+            return exponencial;
         }
 
         public double Normal(double media, double desvio, double min = Double.MinValue, double max = Double.MaxValue)
