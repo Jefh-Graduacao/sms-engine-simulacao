@@ -119,7 +119,8 @@ namespace EngineSimulacao.Restaurante.Recursos
         }
         private void transicaoSaida(Transicao transicao)
         {
-            Console.WriteLine("saida transição " + transicao.Id);
+            //Não faz nada
+            //Console.WriteLine("saida transição " + transicao.Id);
         }
     }
 }

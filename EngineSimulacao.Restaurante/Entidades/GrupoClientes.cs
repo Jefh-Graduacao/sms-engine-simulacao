@@ -1,4 +1,5 @@
 ﻿using EngineSimulacao.Api;
+using System;
 using System.Collections.Generic;
 
 namespace EngineSimulacao.Restaurante.Entidades
@@ -9,9 +10,11 @@ namespace EngineSimulacao.Restaurante.Entidades
         public Pedido Pedido { get; set; }
         public IEnumerable<IAlocacaoGerenciada<RecursoGerenciado>> LugarOcupado;
 
+        private readonly Random _random = new();
+
         public GrupoClientes()
         {
-            Quantidade = (int) GeradorRandomicoContexto.Gerador.Uniforme(1,4);
+            Quantidade = _random.Next(1, 5); //[1,5) = [1,4]
         }
     }
 }

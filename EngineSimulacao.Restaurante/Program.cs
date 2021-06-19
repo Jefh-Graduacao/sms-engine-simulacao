@@ -28,30 +28,54 @@ namespace EngineSimulacao.Restaurante
             }
 
             estatisticas(listaHistorico);
+
         }
 
         private static void estatisticas(List<HistoricoBase> listaHistorico)
         {
             Historico<ChegadaClientes> HistoricoChegadaClientes;
+
             HistoricoChegadaClientes = (Historico<ChegadaClientes>)GetHistoricoBase(listaHistorico, "Histórico EventoGerenciado ChegadaClientes");
 
-            Historico<GrupoClientes> HistoricoFilaCx1;
-            HistoricoFilaCx1 = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Caixa 1");
+            Historico<GrupoClientes> HistoricoFilaCx1, HistoricoFilaCx2,
+                                     BancoBalcao, Mesas2L, Mesas4L,
+                                     FilaPedidosCozinha, FilaPedidosEntrega;
 
-            Historico<GrupoClientes> HistoricoFilaCx2;
+            HistoricoFilaCx1 = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Caixa 1");
             HistoricoFilaCx2 = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Caixa 2");
+
+            BancoBalcao = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Balcão");
+            Mesas2L = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Mesas de 2 Lugares");
+            Mesas4L = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Mesas de 4 Lugares");
+
+            FilaPedidosCozinha = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Pedidos Cozinha");
+            FilaPedidosEntrega = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila de Pedidos para Entrega");
 
             if (HistoricoChegadaClientes != null)
                 Console.WriteLine("Chegaram " + HistoricoChegadaClientes.lista.Count + " clientes.");
 
-            if (HistoricoFilaCx1 != null)
-                Console.WriteLine(HistoricoFilaCx1.lista.Count + " clientes passaram pela fila 1.");
-
-            if (HistoricoFilaCx2 != null)
-                Console.WriteLine(HistoricoFilaCx2.lista.Count + " clientes passaram pela fila 2.");
+            ImprimirNoConsole(HistoricoFilaCx1, "clientes", "fila 1");
+            ImprimirNoConsole(HistoricoFilaCx2, "clientes", "fila 2");
+            Console.WriteLine("");
+            
+            ImprimirNoConsole(BancoBalcao, "clientes", "fila do balcão");
+            ImprimirNoConsole(Mesas2L, "clientes", "fila de mesas 2 lugares");
+            ImprimirNoConsole(Mesas4L, "clientes", "fila de mesas 4 lugares");
+            Console.WriteLine("");
+            
+            ImprimirNoConsole(FilaPedidosCozinha, "pedidos", "fila de pedidos para cozinha");
+            ImprimirNoConsole(FilaPedidosEntrega, "pedidos", "fila de pedidos para entrega");
 
         }
 
+        private static void ImprimirNoConsole(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        {
+            var texto = " "+ oQuePassaPelafila +" passaram pela ";
+
+            if (hisGrupoClientes != null)
+                Console.WriteLine(hisGrupoClientes.lista.Count + texto + nomeDaFila + ".");
+
+        }
 
         private static HistoricoBase GetHistoricoBase(List<HistoricoBase> listaHistorico, string nome)
         {

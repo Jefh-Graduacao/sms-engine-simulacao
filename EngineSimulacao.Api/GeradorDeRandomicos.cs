@@ -46,13 +46,6 @@ namespace EngineSimulacao.Api
             _ultimoGerado_0a1 = (Proximo() % valorMaximo) / (valorMaximo - 1.0);
             return _ultimoGerado_0a1;
         }
-        public long Uniforme(long min, long max)
-        {
-            long valor = Proximo(max) + 1;
-            if (valor < min)
-                return min;
-            return valor;
-        }
 
         public double Exponencial(double média)
         {
