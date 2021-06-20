@@ -12,14 +12,14 @@ namespace EngineSimulacao.Api
 
         public AlocacaoGerenciada(T recurso)
         {
-            this._nascerEmTodosOsNiveis();
+            _nascerEmTodosOsNiveis();
             Recurso = recurso;
             Recurso.Alocado = true;
         }
 
         public void Desalocar()
         {
-            this._morrerEmTodosOsNiveis();
+            _morrerEmTodosOsNiveis();
             Recurso.Alocado = false;
         }
     }

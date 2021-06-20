@@ -16,14 +16,14 @@ namespace EngineSimulacao.ExemploPosto
             Agendador.AgendarAgora(evtIniciar);
             Agendador.Simular();
 
-            List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
+            List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 
             foreach (var historico in listaHistorico)
             {
                 Console.WriteLine("\n\n------------");
-                Console.WriteLine(historico.nome + " maior tempo de vida " + historico.maiorTempoDeVida());
-                Console.WriteLine(historico.nome + " menor tempo de vida " + historico.menorTempoDeVida());
-                Console.WriteLine(historico.nome + " tempo médio de vida " + historico.tempoMedioDeVida());
+                Console.WriteLine(historico.Nome + " maior tempo de vida " + historico.maiorTempoDeVida());
+                Console.WriteLine(historico.Nome + " menor tempo de vida " + historico.menorTempoDeVida());
+                Console.WriteLine(historico.Nome + " tempo médio de vida " + historico.tempoMedioDeVida());
                 Console.WriteLine("------------\n\n");
             }
         }

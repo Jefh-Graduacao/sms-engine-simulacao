@@ -4,11 +4,11 @@ namespace EngineSimulacao.Api
 {
     public static class ColetaDeDados
     {
-        public static List<HistoricoBase> listaDeHistoricos { get; private set; } = new();
+        public static List<HistoricoBase> ListaDeHistoricos { get; } = new();
 
         public static void NovoHistorico<T>(Historico<T> historico) where T : Gerenciado
         {
-            listaDeHistoricos.Add(historico);
+            ListaDeHistoricos.Add(historico);
         }
     }
 }

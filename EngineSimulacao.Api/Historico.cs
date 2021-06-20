@@ -5,7 +5,7 @@ namespace EngineSimulacao.Api
 {
     public abstract class HistoricoBase
     {
-        public string nome { get; protected set; }
+        public string Nome { get; protected set; }
         public abstract double menorTempoDeVida();
         public abstract double tempoMedioDeVida();
         public abstract double maiorTempoDeVida();
@@ -15,12 +15,12 @@ namespace EngineSimulacao.Api
     {
         public Historico()
         {
-            init(gerarNomeHistorico());
+            Inicializar(gerarNomeHistorico());
         }
 
         public Historico(string nome)
         {
-            init(nome);
+            Inicializar(nome);
         }
 
         public List<InfoInstancia<T>> lista { get; private set; } = new();
@@ -61,8 +61,11 @@ namespace EngineSimulacao.Api
 
         public override double tempoMedioDeVida()
         {
-            if (lista.Count == 0) return 0;
+            if (lista.Count == 0) 
+                return 0;
+
             double soma = 0;
+
             foreach (var Info in lista)
             {
                 soma += Info.TempoDeVida;
@@ -80,11 +83,13 @@ namespace EngineSimulacao.Api
             }
             return maior;
         }
-        private void init(string nome)
+
+        private void Inicializar(string nome)
         {
-            this.nome = "Histórico " + nome;
-            ColetaDeDados.NovoHistorico<T>(this);
+            Nome = "Histórico " + nome;
+            ColetaDeDados.NovoHistorico(this);
         }
+
         private string pegarNomeSemGenericos()
         {
             var tipo = typeof(T);

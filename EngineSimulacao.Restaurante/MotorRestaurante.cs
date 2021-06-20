@@ -22,8 +22,9 @@ namespace EngineSimulacao.Restaurante
         public static readonly ConjuntoEntidade<GrupoClientes> FilaMesa4Lugares = new("Fila Mesas de 4 Lugares");
 
         // ----- TEMPOS EM MINUTOS
-        public static double TempoMaximoChegadaClientes = 180.00;
-        public static double TempoMaximoIdasAoBanheiro = TempoMaximoChegadaClientes * 15;
+        public const double TempoMaximoChegadaClientes = 180.00;
+        public const double TempoMaximoIdasAoBanheiro = TempoMaximoChegadaClientes * 15;
+        public const double TempoPrimeiraIdaAoBanheiro = 180;
 
         public static double TEC_ChegadaCLientes => GeradorRandomicoContexto.Gerador.Exponencial(3);
         public static double TempoAtendimentoCaixa => GeradorRandomicoContexto.Gerador.Normal(8, 2);
@@ -50,7 +51,7 @@ namespace EngineSimulacao.Restaurante
             GerenciadorDeRecursos<Mesa2Lugares>.CriarRecursos(4);
             GerenciadorDeRecursos<Mesa4Lugares>.CriarRecursos(4);
 
-            Agendador.AgendarEm(new IrAoBanheiro(), TempoIdaAoBanheiroCaixa);
+            Agendador.AgendarEm(new IrAoBanheiro(), TempoPrimeiraIdaAoBanheiro);
 
         }
     }

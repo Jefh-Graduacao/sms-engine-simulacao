@@ -11,7 +11,7 @@ namespace EngineSimulacao.Api
         Prioridade
     }
 
-    public class ConjuntoEntidade<TEntidade> where TEntidade : EntidadeGerenciada
+    public sealed class ConjuntoEntidade<TEntidade> where TEntidade : EntidadeGerenciada
     {
         private readonly Historico<TEntidade> _historico;
         private IEnumerable<TEntidade> _colecaoInterna;

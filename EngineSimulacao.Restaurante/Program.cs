@@ -1,8 +1,10 @@
 ﻿using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Entidades;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
+using EngineSimulacao.Restaurante.Recursos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EngineSimulacao.Restaurante
 {
@@ -14,25 +16,39 @@ namespace EngineSimulacao.Restaurante
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
-            Agendador.Simular(MotorRestaurante.garcom.Executar);
+            Agendador.Simular(() => CallbackMotor(MotorRestaurante.garcom));
 
-            List<HistoricoBase> listaHistorico = ColetaDeDados.listaDeHistoricos;
+            List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 
             foreach (var historico in listaHistorico)
             {
                 Console.WriteLine("\n\n------------");
-                Console.WriteLine(historico.nome + " maior tempo de vida " + historico.maiorTempoDeVida());
-                Console.WriteLine(historico.nome + " menor tempo de vida " + historico.menorTempoDeVida());
-                Console.WriteLine(historico.nome + " tempo médio de vida " + historico.tempoMedioDeVida());
+                Console.WriteLine(historico.Nome + " maior tempo de vida " + historico.maiorTempoDeVida());
+                Console.WriteLine(historico.Nome + " menor tempo de vida " + historico.menorTempoDeVida());
+                Console.WriteLine(historico.Nome + " tempo médio de vida " + historico.tempoMedioDeVida());
                 Console.WriteLine("------------\n\n");
             }
 
-            estatisticas(listaHistorico);
+            MostrarEstatisticas(listaHistorico);
+        }
+
+        private static List<(double tempo, int quantidade)> RegistroFila1 = new();
+        private static void CallbackMotor(Garcom garcom)
+        {
+            garcom.RedePetri.ExecutarCiclo();
+            RegistroFila1.Add((Agendador.Tempo, MotorRestaurante.FilaCaixa1.TamanhoAtual));
 
         }
 
-        private static void estatisticas(List<HistoricoBase> listaHistorico)
+        private static void MostrarEstatisticas(List<HistoricoBase> listaHistorico)
         {
+            var filaCaixa1 = RegistroFila1.GroupBy(x => (int) x.tempo)
+                .Select(x => (x.Key, x.First().quantidade))
+                .Select(x => $"{x.Key};{x.quantidade}")
+                .Aggregate((a, b) => a + Environment.NewLine + b);
+
+
+
             Historico<ChegadaClientes> HistoricoChegadaClientes;
 
             HistoricoChegadaClientes = (Historico<ChegadaClientes>)GetHistoricoBase(listaHistorico, "Histórico EventoGerenciado ChegadaClientes");
@@ -81,7 +97,7 @@ namespace EngineSimulacao.Restaurante
         {
             foreach (var hisBase in listaHistorico)
             {
-                if (hisBase.nome.Equals(nome))
+                if (hisBase.Nome.Equals(nome))
                 {
                     return hisBase;
                 }

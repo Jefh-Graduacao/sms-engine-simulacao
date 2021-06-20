@@ -9,45 +9,47 @@ namespace EngineSimulacao.Api
     /// </summary>
     public abstract class Gerenciado
     {
-        public static string NomeTipo { get; } = typeof(Gerenciado).Name;
+        public static string NomeTipo { get; } = nameof(Gerenciado);
         private static int _contadorId;
         private static int _gerarId() => _contadorId++;
         public int Id { get; private set; }
 
-        public Gerenciado()
+        protected Gerenciado()
         {
-            this.Id = _gerarId();
+            Id = _gerarId();
         }
+
         /// <summary>
-        /// Adiciona info da da criação da instância no histórico 
+        /// Adiciona info da criação da instância no histórico 
         /// de sua classe, e de todas as classes que herda
         /// </summary>
         protected void _nascerEmTodosOsNiveis()
         {
-            Type tipoAtual = this.GetType();
+            Type tipoAtual = GetType();
 
-            while (tipoAtual.Name != Gerenciado.NomeTipo)
+            while (tipoAtual.Name != NomeTipo)
             {
-                this.chamarGerenciadorDoTipo(tipoAtual, "nascimento");
+                chamarGerenciadorDoTipo(tipoAtual, "nascimento");
                 tipoAtual = tipoAtual.BaseType;
             }
         }
+
         /// <summary>
         /// Adiciona info da destruição da instância no histórico 
         /// de sua classe, e de todas as classes que herda
         /// </summary>
         protected void _morrerEmTodosOsNiveis()
         {
-            Type tipoAtual = this.GetType();
+            Type tipoAtual = GetType();
 
             while (tipoAtual.Name != "Gerenciado")
             {
-                this.chamarGerenciadorDoTipo(tipoAtual, "morte");
+                chamarGerenciadorDoTipo(tipoAtual, "morte");
                 tipoAtual = tipoAtual.BaseType;
             }
         }
         /// <summary>
-        /// Realiza ade maneira controlada uma chamada do formato:
+        /// Realiza a de maneira controlada uma chamada do formato:
         ///
         ///     Gerenciador<tipo>.nomeMetodo(this);
         ///

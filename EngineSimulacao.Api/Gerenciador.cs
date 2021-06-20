@@ -5,6 +5,7 @@ namespace EngineSimulacao.Api
     public static class Gerenciador<T> where T : Gerenciado
     {
         private static readonly Historico<T> Historico = new();
+
         public static void nascimento(T instancia)
         {
             Historico.nascimento(instancia);

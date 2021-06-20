@@ -170,7 +170,7 @@ namespace EngineSimulacao.Restaurante.Recursos
             );
         }
 
-        public void Executar()
+        public void ExecutarRedePetri()
         {
             RedePetri.ExecutarCiclo();
         }
@@ -188,10 +188,10 @@ namespace EngineSimulacao.Restaurante.Recursos
             switch (lugar.Id)
             {
                 case 20:
-                {
-                    Agendador.AgendarEm(new FinalizarIdaAoBanheiro(), MotorRestaurante.TempoRetornoDoBanheiro);
-                    break;
-                }
+                    {
+                        Agendador.AgendarEm(new FinalizarIdaAoBanheiro(), MotorRestaurante.TempoRetornoDoBanheiro);
+                        break;
+                    }
             }
         }
 
@@ -200,19 +200,19 @@ namespace EngineSimulacao.Restaurante.Recursos
             switch (lugar.Id)
             {
                 case 2:
-                {
-                    if (MotorRestaurante.Debug) Console.WriteLine($"\t\t\tCaixa vai ao banheiro {Agendador.Tempo:N6}");
-                    break;
-                }
+                    {
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\t\t\tCaixa vai ao banheiro {Agendador.Tempo:N6}");
+                        break;
+                    }
                 case 21:
-                {
-                    if (MotorRestaurante.Debug) Console.WriteLine($"\t\t\tCaixa volta do banheiro {Agendador.Tempo:N6}");
-                    break;
-                }
+                    {
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\t\t\tCaixa volta do banheiro {Agendador.Tempo:N6}");
+                        break;
+                    }
                 default:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
         }
 
