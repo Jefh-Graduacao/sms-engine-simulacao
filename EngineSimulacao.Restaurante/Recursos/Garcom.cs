@@ -9,6 +9,8 @@ namespace EngineSimulacao.Restaurante.Recursos
 {
     public sealed class Garcom : RecursoGerenciado
     {
+        const bool DEBUG = true;
+
         public RedePetri RedePetri { get; }
 
         public Lugar GarcomLivre => RedePetri.ObterLugar(1);
@@ -179,6 +181,7 @@ namespace EngineSimulacao.Restaurante.Recursos
         private void marcaConsumida(Lugar lugar)
         {
         }
+        
         private void fluxoSubtituirCaixaMarcaProduzida(Lugar lugar)
         {
 
@@ -212,11 +215,13 @@ namespace EngineSimulacao.Restaurante.Recursos
                 case 3:
                     {
                         _clientes = MotorRestaurante.FilaEntrega.Remover();
+                        if(DEBUG) Console.WriteLine("Garcom comeca a entrega "+_clientes.Id+"! "+Agendador.Tempo);
                         break;
                     }
                 case 31:
                     {
                         Agendador.AgendarAgora(new ComecarAComer(_clientes));
+                        if(DEBUG) Console.WriteLine("Cliente "+_clientes.Id+"vai comecar comer! "+Agendador.Tempo);
                         break;
                     }
                 default:
@@ -228,12 +233,40 @@ namespace EngineSimulacao.Restaurante.Recursos
 
         private void fluxoClienteVaiSentarMarcaProduzida(Lugar lugar)
         {
-
+            switch (lugar.Id)
+            {
+                case 40:
+                    {
+                        Agendador.AgendarEm(new FinalizarHigienizarMesa(), MotorRestaurante.TempoHigienizaçaoMesaPeloGarcom);
+                        if(DEBUG) Console.WriteLine("Garçom comeca limpar mesa! "+Agendador.Tempo);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
         }
 
         private void fluxoClienteVaiSentarMarcaConsumida(Lugar lugar)
         {
-
+            switch (lugar.Id)
+            {
+                case 4:
+                    {
+                        if(DEBUG) Console.WriteLine("Cliente sentou! "+Agendador.Tempo);
+                        break;
+                    }
+                case 41:
+                    {
+                        if(DEBUG) Console.WriteLine("Mesa Higienizada!" +Agendador.Tempo);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
         }
 
         private void transicaoSaida(Transicao transicao)

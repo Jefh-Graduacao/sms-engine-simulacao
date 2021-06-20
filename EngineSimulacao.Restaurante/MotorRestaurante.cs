@@ -24,6 +24,7 @@ namespace EngineSimulacao.Restaurante
         public static double TempoAtendimentoCaixa => GeradorRandomicoContexto.Gerador.Normal(8, 2);
         public static double TempoPreparoPedido => GeradorRandomicoContexto.Gerador.Normal(14, 5, 0.1, 35);
         public static double TempoEntregaPedidoPeloGarcom => GeradorRandomicoContexto.Gerador.Normal(2, 0.3);
+        public static double TempoHigienizaçaoMesaPeloGarcom => GeradorRandomicoContexto.Gerador.Normal(3, 0.6);
         public static double TempoDeRefeição => GeradorRandomicoContexto.Gerador.Normal(20, 8, 0.1, 45);
 
         // ------  RECURSOS -------

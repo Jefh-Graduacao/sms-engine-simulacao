@@ -23,6 +23,8 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
 
             clientes.LugarOcupado = AlocarMesa(1);
 
+            MotorRestaurante.garcom.ClienteVaiSentar.ProduzirMarcas(1);
+
             if (clientes.Pedido.ProntroParaComer)
             {
                 MotorRestaurante.FilaEntrega.Adicionar(clientes);
