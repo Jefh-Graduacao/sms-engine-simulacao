@@ -19,6 +19,9 @@ namespace EngineSimulacao.Restaurante.Eventos
         protected override void Estrategia()
         {
             GerenciadorDeRecursos<Cozinheiro>.Liberar(_cozinheiros);
+
+            Agendador.AgendarAgora(new EnviarPedidoParaCozinha());
+            
             _clientes.Pedido.ProntroParaComer = true;
             if (null != _clientes.LugarOcupado)
             {
