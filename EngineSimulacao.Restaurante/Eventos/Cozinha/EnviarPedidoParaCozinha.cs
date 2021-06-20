@@ -7,6 +7,10 @@ namespace EngineSimulacao.Restaurante.Eventos
     {
         protected override void Estrategia()
         {
+
+            if (!(MotorRestaurante.FilaPedidosCozinha.TamanhoAtual > 0))
+                return;
+
             const int qtdCozinheirosNecessarios = 1;
 
             if (!GerenciadorDeRecursos<Cozinheiro>.VerificarDisponibilidade(qtdCozinheirosNecessarios))

@@ -34,7 +34,8 @@ namespace EngineSimulacao.Restaurante
             GerenciadorDeRecursos<Garcom>.CriarRecursos(1);
             garcom = GerenciadorDeRecursos<Garcom>.Alocar(1).First().Recurso;
 
-            GerenciadorDeRecursos<AtendenteCaixa>.CriarRecursos(2);
+            GerenciadorDeRecursos<AtendenteCaixa1>.CriarRecursos(1);
+            GerenciadorDeRecursos<AtendenteCaixa2>.CriarRecursos(1);
             GerenciadorDeRecursos<Cozinheiro>.CriarRecursos(3);
 
             GerenciadorDeRecursos<BancoBalcao>.CriarRecursos(6);
