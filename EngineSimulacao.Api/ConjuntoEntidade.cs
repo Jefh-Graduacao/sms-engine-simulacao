@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EngineSimulacao.Api
 {
@@ -13,23 +14,26 @@ namespace EngineSimulacao.Api
     public class ConjuntoEntidade<TEntidade> where TEntidade : EntidadeGerenciada
     {
         private readonly Historico<TEntidade> _historico;
-        private List<TEntidade> _entidadesAtuais = new();
+        private IEnumerable<TEntidade> _colecaoInterna;
 
-        public string Nome { private set; get; }
-        public Mode Modo { get; set; } = Mode.Fifo;
+        public string Nome { get; }
+        public Mode Modo { get; set; }
         public int TamanhoMaximo { get; set; } = int.MaxValue;
-        public int TamanhoAtual => _entidadesAtuais.Count;
 
-        public ConjuntoEntidade(string nome)
+        public int TamanhoAtual => _colecaoInterna.Count();
+
+        public ConjuntoEntidade(string nome, Mode modo = Mode.Fifo)
         {
-            _historico = new Historico<TEntidade>("ConjuntoEntidade " + nome);
+            Nome = nome;
+            Modo = modo;
+            _colecaoInterna = new List<TEntidade>();
+            _historico = new Historico<TEntidade>("ConjuntoEntidade " + Nome);
         }
 
         public bool Adicionar(TEntidade entidade)
         {
             if (TamanhoAtual == TamanhoMaximo) return false;
-
-            var tempo = Agendador.Tempo;
+            
             _historico.nascimento(entidade);
 
             switch (Modo)
@@ -62,31 +66,31 @@ namespace EngineSimulacao.Api
 
         private void LIFOAdicionar(TEntidade entidade)
         {
-            Stack<TEntidade> pilha = new Stack<TEntidade>(_entidadesAtuais);
+            Stack<TEntidade> pilha = new Stack<TEntidade>(_colecaoInterna);
             pilha.Push(entidade);
-            _entidadesAtuais = new List<TEntidade>(pilha);
+            _colecaoInterna = new List<TEntidade>(pilha);
         }
 
         private void FIFOAdicionar(TEntidade entidade)
         {
-            Queue<TEntidade> fila = new Queue<TEntidade>(_entidadesAtuais);
+            Queue<TEntidade> fila = new Queue<TEntidade>(_colecaoInterna);
             fila.Enqueue(entidade);
-            _entidadesAtuais = new List<TEntidade>(fila);
+            _colecaoInterna = new List<TEntidade>(fila);
         }
 
         private TEntidade LIFORemover()
         {
-            Stack<TEntidade> pilha = new Stack<TEntidade>(_entidadesAtuais);
+            Stack<TEntidade> pilha = new Stack<TEntidade>(_colecaoInterna);
             TEntidade entidade = pilha.Pop();
-            _entidadesAtuais = new List<TEntidade>(pilha);
+            _colecaoInterna = new List<TEntidade>(pilha);
             return entidade;
         }
 
         private TEntidade FIFORemover()
         {
-            Queue<TEntidade> fila = new Queue<TEntidade>(_entidadesAtuais);
+            Queue<TEntidade> fila = new Queue<TEntidade>(_colecaoInterna);
             TEntidade entidade = fila.Dequeue();
-            _entidadesAtuais = new List<TEntidade>(fila);
+            _colecaoInterna = new List<TEntidade>(fila);
             return entidade;
         }
     }

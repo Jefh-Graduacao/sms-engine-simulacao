@@ -1,7 +1,9 @@
 ﻿using System;
 using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Entidades;
+using EngineSimulacao.Restaurante.Eventos.Caixas;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
+using EngineSimulacao.Restaurante.Eventos.Garcom;
 using RedesPetri.Entidades;
 using RedesPetri.Entidades.Arcos;
 
@@ -9,8 +11,6 @@ namespace EngineSimulacao.Restaurante.Recursos
 {
     public sealed class Garcom : RecursoGerenciado
     {
-        const bool DEBUG = true;
-
         public RedePetri RedePetri { get; }
 
         public Lugar GarcomLivre => RedePetri.ObterLugar(1);
@@ -28,23 +28,24 @@ namespace EngineSimulacao.Restaurante.Recursos
         public Lugar MesaHigienizada => RedePetri.ObterLugar(41);
 
         public GrupoClientes _clientes;
+
         public Garcom()
         {
             RedePetri = new RedePetri();
-            RedePetri.CriarLugar(1, 1, this.marcaProduzida, this.marcaConsumida);
+            RedePetri.CriarLugar(1, 1, marcaProduzida, marcaConsumida);
             inicializarRedeSubtituirCaixa();
             inicializarRedeEntregaPedido();
-            inicializarRedeClienteVaiSentar();
+            InicializarRedeLimpezaMesa();
         }
 
         private void inicializarRedeSubtituirCaixa()
         {
-            RedePetri.CriarLugar(2, 0, this.fluxoSubtituirCaixaMarcaProduzida, this.fluxoSubtituirCaixaMarcaConsumida);
-            RedePetri.CriarLugar(20, 0, this.fluxoSubtituirCaixaMarcaProduzida, this.fluxoSubtituirCaixaMarcaConsumida);
-            RedePetri.CriarLugar(21, 0, this.fluxoSubtituirCaixaMarcaProduzida, this.fluxoSubtituirCaixaMarcaConsumida);
+            RedePetri.CriarLugar(2, 0, fluxoSubtituirCaixaMarcaProduzida, fluxoSubtituirCaixaMarcaConsumida);
+            RedePetri.CriarLugar(20, 0, fluxoSubtituirCaixaMarcaProduzida, fluxoSubtituirCaixaMarcaConsumida);
+            RedePetri.CriarLugar(21, 0, fluxoSubtituirCaixaMarcaProduzida, fluxoSubtituirCaixaMarcaConsumida);
 
-            RedePetri.CriarTransicao(20, this.transicaoSaida);
-            RedePetri.CriarTransicao(21, this.transicaoSaida);
+            RedePetri.CriarTransicao(20);
+            RedePetri.CriarTransicao(21);
 
             RedePetri.CriarArco(
                 GarcomLivre,
@@ -83,12 +84,12 @@ namespace EngineSimulacao.Restaurante.Recursos
 
         private void inicializarRedeEntregaPedido()
         {
-            RedePetri.CriarLugar(3, 0, this.fluxoEntregaPedidoMarcaProduzida, this.fluxoEntregaPedidoMarcaConsumida);
-            RedePetri.CriarLugar(30, 0, this.fluxoEntregaPedidoMarcaProduzida, this.fluxoEntregaPedidoMarcaConsumida);
-            RedePetri.CriarLugar(31, 0, this.fluxoEntregaPedidoMarcaProduzida, this.fluxoEntregaPedidoMarcaConsumida);
+            RedePetri.CriarLugar(3, 0, fluxoEntregaPedidoMarcaProduzida, fluxoEntregaPedidoMarcaConsumida);
+            RedePetri.CriarLugar(30, 0, fluxoEntregaPedidoMarcaProduzida, fluxoEntregaPedidoMarcaConsumida);
+            RedePetri.CriarLugar(31, 0, fluxoEntregaPedidoMarcaProduzida, fluxoEntregaPedidoMarcaConsumida);
 
-            RedePetri.CriarTransicao(30, this.transicaoSaida);
-            RedePetri.CriarTransicao(31, this.transicaoSaida);
+            RedePetri.CriarTransicao(30);
+            RedePetri.CriarTransicao(31);
 
             RedePetri.CriarArco(
                 GarcomLivre,
@@ -125,14 +126,14 @@ namespace EngineSimulacao.Restaurante.Recursos
             );
         }
 
-        private void inicializarRedeClienteVaiSentar()
+        private void InicializarRedeLimpezaMesa()
         {
-            RedePetri.CriarLugar(4, 0, this.fluxoClienteVaiSentarMarcaProduzida, this.fluxoClienteVaiSentarMarcaConsumida);
-            RedePetri.CriarLugar(40, 0, this.fluxoClienteVaiSentarMarcaProduzida, this.fluxoClienteVaiSentarMarcaConsumida);
-            RedePetri.CriarLugar(41, 0, this.fluxoClienteVaiSentarMarcaProduzida, this.fluxoClienteVaiSentarMarcaConsumida);
+            RedePetri.CriarLugar(4, 0, fluxoClienteVaiSentarMarcaProduzida, fluxoClienteVaiSentarMarcaConsumida);
+            RedePetri.CriarLugar(40, 0, fluxoClienteVaiSentarMarcaProduzida, fluxoClienteVaiSentarMarcaConsumida);
+            RedePetri.CriarLugar(41, 0, fluxoClienteVaiSentarMarcaProduzida, fluxoClienteVaiSentarMarcaConsumida);
 
-            RedePetri.CriarTransicao(40, this.transicaoSaida);
-            RedePetri.CriarTransicao(41, this.transicaoSaida);
+            RedePetri.CriarTransicao(40);
+            RedePetri.CriarTransicao(41);
 
             RedePetri.CriarArco(
                 GarcomLivre,
@@ -181,15 +182,38 @@ namespace EngineSimulacao.Restaurante.Recursos
         private void marcaConsumida(Lugar lugar)
         {
         }
-        
+
         private void fluxoSubtituirCaixaMarcaProduzida(Lugar lugar)
         {
-
+            switch (lugar.Id)
+            {
+                case 20:
+                {
+                    Agendador.AgendarEm(new FinalizarIdaAoBanheiro(), MotorRestaurante.TempoRetornoDoBanheiro);
+                    break;
+                }
+            }
         }
-        
+
         private void fluxoSubtituirCaixaMarcaConsumida(Lugar lugar)
         {
-
+            switch (lugar.Id)
+            {
+                case 2:
+                {
+                    if (MotorRestaurante.Debug) Console.WriteLine($"\t\t\tCaixa vai ao banheiro {Agendador.Tempo:N6}");
+                    break;
+                }
+                case 21:
+                {
+                    if (MotorRestaurante.Debug) Console.WriteLine($"\t\t\tCaixa volta do banheiro {Agendador.Tempo:N6}");
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
         }
 
         private void fluxoEntregaPedidoMarcaProduzida(Lugar lugar)
@@ -215,13 +239,13 @@ namespace EngineSimulacao.Restaurante.Recursos
                 case 3:
                     {
                         _clientes = MotorRestaurante.FilaEntrega.Remover();
-                        if(DEBUG) Console.WriteLine("Garcom comeca a entrega "+_clientes.Id+"! "+Agendador.Tempo);
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\tGarçom começa a entrega {_clientes.Id}! {Agendador.Tempo}");
                         break;
                     }
                 case 31:
                     {
                         Agendador.AgendarAgora(new ComecarAComer(_clientes));
-                        if(DEBUG) Console.WriteLine("Cliente "+_clientes.Id+"vai comecar comer! "+Agendador.Tempo);
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\tCliente {_clientes.Id} vai comecar comer! {Agendador.Tempo}");
                         break;
                     }
                 default:
@@ -238,7 +262,7 @@ namespace EngineSimulacao.Restaurante.Recursos
                 case 40:
                     {
                         Agendador.AgendarEm(new FinalizarHigienizarMesa(), MotorRestaurante.TempoHigienizaçaoMesaPeloGarcom);
-                        if(DEBUG) Console.WriteLine("Garçom comeca limpar mesa! "+Agendador.Tempo);
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\t\tGarçom comeca limpar mesa! {Agendador.Tempo}");
                         break;
                     }
                 default:
@@ -254,12 +278,12 @@ namespace EngineSimulacao.Restaurante.Recursos
             {
                 case 4:
                     {
-                        if(DEBUG) Console.WriteLine("Cliente sentou! "+Agendador.Tempo);
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\t\tCliente sentou! {Agendador.Tempo}");
                         break;
                     }
                 case 41:
                     {
-                        if(DEBUG) Console.WriteLine("Mesa Higienizada!" +Agendador.Tempo);
+                        if (MotorRestaurante.Debug) Console.WriteLine($"\t\tMesa Higienizada!{Agendador.Tempo}");
                         break;
                     }
                 default:
@@ -267,12 +291,6 @@ namespace EngineSimulacao.Restaurante.Recursos
                         break;
                     }
             }
-        }
-
-        private void transicaoSaida(Transicao transicao)
-        {
-            //Não faz nada
-            //Console.WriteLine("saida transição " + transicao.Id);
         }
     }
 }

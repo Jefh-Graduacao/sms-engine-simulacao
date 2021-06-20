@@ -1,12 +1,15 @@
 ﻿using System.Linq;
 using EngineSimulacao.Api;
 using EngineSimulacao.Restaurante.Entidades;
+using EngineSimulacao.Restaurante.Eventos.Caixas;
 using EngineSimulacao.Restaurante.Recursos;
 
 namespace EngineSimulacao.Restaurante
 {
     public static class MotorRestaurante
     {
+        public const bool Debug = true;
+
         // -----  FILAS -----
         public static readonly ConjuntoEntidade<GrupoClientes> FilaCaixa1 = new("Fila Caixa 1");
         public static readonly ConjuntoEntidade<GrupoClientes> FilaCaixa2 = new("Fila Caixa 2");
@@ -20,12 +23,16 @@ namespace EngineSimulacao.Restaurante
 
         // ----- TEMPOS EM MINUTOS
         public static double TempoMaximoChegadaClientes = 180.00;
+        public static double TempoMaximoIdasAoBanheiro = TempoMaximoChegadaClientes * 15;
+
         public static double TEC_ChegadaCLientes => GeradorRandomicoContexto.Gerador.Exponencial(3);
         public static double TempoAtendimentoCaixa => GeradorRandomicoContexto.Gerador.Normal(8, 2);
         public static double TempoPreparoPedido => GeradorRandomicoContexto.Gerador.Normal(14, 5, 0.1, 35);
         public static double TempoEntregaPedidoPeloGarcom => GeradorRandomicoContexto.Gerador.Normal(2, 0.3);
         public static double TempoHigienizaçaoMesaPeloGarcom => GeradorRandomicoContexto.Gerador.Normal(3, 0.6);
         public static double TempoDeRefeição => GeradorRandomicoContexto.Gerador.Normal(20, 8, 0.1, 45);
+        public static double TempoIdaAoBanheiroCaixa => GeradorRandomicoContexto.Gerador.Normal(60, 8);
+        public static double TempoRetornoDoBanheiro => GeradorRandomicoContexto.Gerador.Normal(2, 0.5);
 
         // ------  RECURSOS -------
         public static Garcom garcom;
@@ -42,6 +49,9 @@ namespace EngineSimulacao.Restaurante
             GerenciadorDeRecursos<BancoBalcao>.CriarRecursos(6);
             GerenciadorDeRecursos<Mesa2Lugares>.CriarRecursos(4);
             GerenciadorDeRecursos<Mesa4Lugares>.CriarRecursos(4);
+
+            Agendador.AgendarEm(new IrAoBanheiro(), TempoIdaAoBanheiroCaixa);
+
         }
     }
 }

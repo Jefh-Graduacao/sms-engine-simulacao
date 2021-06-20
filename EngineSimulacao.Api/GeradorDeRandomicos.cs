@@ -56,7 +56,7 @@ namespace EngineSimulacao.Api
             return exponencial;
         }
 
-        public double Normal(double media, double desvio, double min = Double.MinValue, double max = Double.MaxValue)
+        public double Normal(double media, double desvio, double min = double.MinValue, double max = double.MaxValue)
         {
             if (_penultimoGerado_0a1 == -999.99)
             {

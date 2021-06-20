@@ -1,6 +1,6 @@
 using EngineSimulacao.Api;
 
-namespace EngineSimulacao.Restaurante.Eventos.Clientes
+namespace EngineSimulacao.Restaurante.Eventos.Garcom
 {
     public sealed class FinalizarEntregaPedido : EventoGerenciado
     {
