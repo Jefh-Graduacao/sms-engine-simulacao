@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EngineSimulacao.ExemploPost
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineSimulacao.Restaurante", "EngineSimulacao.Restaurante\EngineSimulacao.Restaurante.csproj", "{77D5CECF-C8B8-44D4-B43F-E26AC62939D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineSimulacao.RestauranteSemGarcom", "EngineSimulacao.RestauranteSemGarcom\EngineSimulacao.RestauranteSemGarcom.csproj", "{D9C4AD2D-452B-44EA-848C-9074C26BB590}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{77D5CECF-C8B8-44D4-B43F-E26AC62939D9}.Release|x64.Build.0 = Release|Any CPU
 		{77D5CECF-C8B8-44D4-B43F-E26AC62939D9}.Release|x86.ActiveCfg = Release|Any CPU
 		{77D5CECF-C8B8-44D4-B43F-E26AC62939D9}.Release|x86.Build.0 = Release|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Debug|x64.Build.0 = Debug|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Debug|x86.Build.0 = Debug|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Release|x64.ActiveCfg = Release|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Release|x64.Build.0 = Release|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9C4AD2D-452B-44EA-848C-9074C26BB590}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

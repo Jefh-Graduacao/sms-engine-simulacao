@@ -6,7 +6,7 @@ namespace EngineSimulacao.Restaurante.Eventos.Garcom
     {
         protected override void Estrategia()
         {
-            MotorRestaurante.garcom.MesaHigienizada.ProduzirMarcas(1);
+            MotorRestaurante.Garcom.MesaHigienizada.ProduzirMarcas(1);
         }
     }
 }

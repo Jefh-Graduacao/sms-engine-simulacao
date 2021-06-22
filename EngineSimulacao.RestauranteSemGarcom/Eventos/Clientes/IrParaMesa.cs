@@ -1,13 +1,13 @@
 ﻿using EngineSimulacao.Api;
-using EngineSimulacao.Restaurante.Entidades;
-using EngineSimulacao.Restaurante.Recursos;
+using EngineSimulacao.RestauranteSemGarcom.Entidades;
+using EngineSimulacao.RestauranteSemGarcom.Recursos;
 using System.Collections.Generic;
 
-namespace EngineSimulacao.Restaurante.Eventos.Clientes
+namespace EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes
 {
     public sealed class IrParaMesa : EventoGerenciado
     {
-        private int _quantidadeLugares;
+        private readonly int _quantidadeLugares;
 
         public IrParaMesa(int quantidadeLugares)
         {
@@ -22,14 +22,10 @@ namespace EngineSimulacao.Restaurante.Eventos.Clientes
             var clientes = RemoverDaFilaAdequada();
 
             clientes.LugarOcupado = AlocarMesa(1);
-
-            MotorRestaurante.Garcom.ClienteVaiSentar.ProduzirMarcas(1);
-
+            
             if (clientes.Pedido.ProntroParaComer)
             {
-                MotorRestaurante.FilaEntrega.Adicionar(clientes);
-
-                MotorRestaurante.Garcom.PedidoPronto.ProduzirMarcas(1);
+                Agendador.AgendarAgora(new ComecarAComer(clientes));
             }
         }
 

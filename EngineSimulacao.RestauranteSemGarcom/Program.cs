@@ -1,11 +1,12 @@
-﻿using EngineSimulacao.Api;
-using EngineSimulacao.Restaurante.Entidades;
-using EngineSimulacao.Restaurante.Eventos.Clientes;
-using EngineSimulacao.Restaurante.Recursos;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using EngineSimulacao.Api;
+using EngineSimulacao.RestauranteSemGarcom.Entidades;
+using EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes;
+using EngineSimulacao.RestauranteSemGarcom.Recursos;
 
-namespace EngineSimulacao.Restaurante
+namespace EngineSimulacao.RestauranteSemGarcom
 {
     public static class Program
     {
@@ -15,7 +16,7 @@ namespace EngineSimulacao.Restaurante
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
-            Agendador.Simular(() => CallbackMotor(MotorRestaurante.Garcom));
+            Agendador.Simular(CallbackMotor);
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 
@@ -30,16 +31,18 @@ namespace EngineSimulacao.Restaurante
 
             MostrarEstatisticas(listaHistorico);
         }
-        
-        private static void CallbackMotor(Garcom garcom)
+
+        private static List<(int, int)> listaHistoricoFila1 = new();
+        public static void CallbackMotor()
         {
-            garcom.RedePetri.ExecutarCiclo();
+            if ((int) Agendador.Tempo % 10 == 0)
+            {
+                listaHistoricoFila1.Add(((int)Agendador.Tempo, MotorRestaurante.FilaCaixa1.TamanhoAtual));
+            }
         }
 
         private static void MostrarEstatisticas(List<HistoricoBase> listaHistorico)
         {
-            var h = MotorRestaurante.FilaCaixa1.HistoricoQuantidades;
-            
             var historicoChegadaClientes = (Historico<ChegadaClientes>)GetHistoricoBase(listaHistorico, "Histórico EventoGerenciado ChegadaClientes");
 
             var historicoFilaCx1 = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila Caixa 1");
@@ -53,7 +56,7 @@ namespace EngineSimulacao.Restaurante
             var filaPedidosEntrega = (Historico<GrupoClientes>)GetHistoricoBase(listaHistorico, "Histórico ConjuntoEntidade Fila de Pedidos para Entrega");
 
             if (historicoChegadaClientes != null)
-                Console.WriteLine("Chegaram " + historicoChegadaClientes.lista.Count + " clientes.");
+                Console.WriteLine($"Chegaram {historicoChegadaClientes.lista.Count} clientes.");
 
             ImprimirNoConsole(historicoFilaCx1, "clientes", "fila 1");
             ImprimirNoConsole(historicoFilaCx2, "clientes", "fila 2");
@@ -71,24 +74,13 @@ namespace EngineSimulacao.Restaurante
 
         private static void ImprimirNoConsole(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
         {
-            var texto = " "+ oQuePassaPelafila +" passaram pela ";
+            var texto = $"{oQuePassaPelafila} passaram pela";
 
             if (hisGrupoClientes != null)
-                Console.WriteLine(hisGrupoClientes.lista.Count + texto + nomeDaFila + ".");
-
+                Console.WriteLine($"{hisGrupoClientes.lista.Count} {texto} {nomeDaFila}.");
         }
 
-        private static HistoricoBase GetHistoricoBase(List<HistoricoBase> listaHistorico, string nome)
-        {
-            foreach (var hisBase in listaHistorico)
-            {
-                if (hisBase.Nome.Equals(nome))
-                {
-                    return hisBase;
-                }
-            }
-            return null;
-        }
-
+        private static HistoricoBase GetHistoricoBase(List<HistoricoBase> listaHistorico, string nome) 
+            => listaHistorico.FirstOrDefault(hisBase => hisBase.Nome.Equals(nome));
     }
 }

@@ -6,7 +6,7 @@ namespace EngineSimulacao.Restaurante.Eventos.Caixas
     {
         protected override void Estrategia()
         {
-            MotorRestaurante.garcom.CaixaRetorno.ProduzirMarcas(1);
+            MotorRestaurante.Garcom.CaixaRetorno.ProduzirMarcas(1);
 
             var proximaIdaAoBanheiro = MotorRestaurante.TempoIdaAoBanheiroCaixa;
             if (Agendador.Tempo + proximaIdaAoBanheiro <= MotorRestaurante.TempoMaximoIdasAoBanheiro)

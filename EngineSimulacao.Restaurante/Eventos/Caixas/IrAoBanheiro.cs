@@ -6,7 +6,7 @@ namespace EngineSimulacao.Restaurante.Eventos.Caixas
     {
         protected override void Estrategia()
         {
-            MotorRestaurante.garcom.SubstituirCaixa.ProduzirMarcas(1);
+            MotorRestaurante.Garcom.SubstituirCaixa.ProduzirMarcas(1);
         }
     }
 }

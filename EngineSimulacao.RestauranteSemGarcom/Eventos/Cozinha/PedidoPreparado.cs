@@ -1,9 +1,10 @@
-﻿using EngineSimulacao.Api;
-using EngineSimulacao.Restaurante.Entidades;
-using EngineSimulacao.Restaurante.Recursos;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using EngineSimulacao.Api;
+using EngineSimulacao.RestauranteSemGarcom.Entidades;
+using EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes;
+using EngineSimulacao.RestauranteSemGarcom.Recursos;
 
-namespace EngineSimulacao.Restaurante.Eventos
+namespace EngineSimulacao.RestauranteSemGarcom.Eventos.Cozinha
 {
     public sealed class PedidoPreparado : EventoGerenciado
     {
@@ -25,9 +26,7 @@ namespace EngineSimulacao.Restaurante.Eventos
             _clientes.Pedido.ProntroParaComer = true;
             if (null != _clientes.LugarOcupado)
             {
-                MotorRestaurante.FilaEntrega.Adicionar(_clientes);
-
-                MotorRestaurante.Garcom.PedidoPronto.ProduzirMarcas(1);
+                Agendador.AgendarAgora(new ComecarAComer(_clientes));
             }
         }
     }

@@ -11,6 +11,8 @@ namespace EngineSimulacao.Api
         Prioridade
     }
 
+    public sealed record HistoricoConjuntoEntidade(double Tempo, int Quantidade);
+
     public sealed class ConjuntoEntidade<TEntidade> where TEntidade : EntidadeGerenciada
     {
         private readonly Historico<TEntidade> _historico;
@@ -19,8 +21,9 @@ namespace EngineSimulacao.Api
         public string Nome { get; }
         public Mode Modo { get; set; }
         public int TamanhoMaximo { get; set; } = int.MaxValue;
-
         public int TamanhoAtual => _colecaoInterna.Count();
+        public Historico<TEntidade> Historico => _historico;
+        public List<HistoricoConjuntoEntidade> HistoricoQuantidades { get; } = new();
 
         public ConjuntoEntidade(string nome, Mode modo = Mode.Fifo)
         {
@@ -45,22 +48,22 @@ namespace EngineSimulacao.Api
                     LIFOAdicionar(entidade);
                     break;
             }
+
+            HistoricoQuantidades.Add(new HistoricoConjuntoEntidade(Agendador.Tempo, TamanhoAtual));
             return false;
         }
 
         public TEntidade Remover()
         {
-            TEntidade entidade = null;
-            switch (Modo)
+            var entidade = Modo switch
             {
-                case Mode.Fifo:
-                    entidade = FIFORemover();
-                    break;
-                case Mode.Lifo:
-                    entidade = LIFORemover();
-                    break;
-            }
+                Mode.Fifo => FIFORemover(),
+                Mode.Lifo => LIFORemover(),
+                _ => null
+            };
             _historico.morte(entidade);
+            
+            HistoricoQuantidades.Add(new HistoricoConjuntoEntidade(Agendador.Tempo, TamanhoAtual));
             return entidade;
         }
 
