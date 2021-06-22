@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EngineSimulacao.Api;
+﻿using EngineSimulacao.Api;
 using EngineSimulacao.RestauranteSemGarcom.Entidades;
 using EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes;
-using EngineSimulacao.RestauranteSemGarcom.Recursos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EngineSimulacao.RestauranteSemGarcom
 {
@@ -16,7 +15,7 @@ namespace EngineSimulacao.RestauranteSemGarcom
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
-            Agendador.Simular(CallbackMotor);
+            Agendador.Simular();
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 
@@ -30,15 +29,6 @@ namespace EngineSimulacao.RestauranteSemGarcom
             }
 
             MostrarEstatisticas(listaHistorico);
-        }
-
-        private static List<(int, int)> listaHistoricoFila1 = new();
-        public static void CallbackMotor()
-        {
-            if ((int) Agendador.Tempo % 10 == 0)
-            {
-                listaHistoricoFila1.Add(((int)Agendador.Tempo, MotorRestaurante.FilaCaixa1.TamanhoAtual));
-            }
         }
 
         private static void MostrarEstatisticas(List<HistoricoBase> listaHistorico)
