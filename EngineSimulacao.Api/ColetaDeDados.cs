@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EngineSimulacao.Api
 {
@@ -10,5 +11,8 @@ namespace EngineSimulacao.Api
         {
             ListaDeHistoricos.Add(historico);
         }
+
+        public static HistoricoBase GetHistoricoBase( string nome) 
+            => ListaDeHistoricos.FirstOrDefault(hisBase => hisBase.Nome.Equals(nome));
     }
 }

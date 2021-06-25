@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "buildComGarcom",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -14,12 +14,12 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "build",
+            "label": "buildMotorPosto",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/EngineSimulacao.RestauranteSemGarcom/EngineSimulacao.RestauranteSemGarcom.csproj",
+                "${workspaceFolder}/EngineSimulacao.ExemploPosto/EngineSimulacao.ExemploPosto.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -45,6 +45,44 @@
                 "watch",
                 "run",
                 "${workspaceFolder}/EngineSimulacao.Restaurante/EngineSimulacao.Restaurante.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+        ,
+        {
+            "label": "buildSemGarcom",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/EngineSimulacao.RestauranteSemGarcom/EngineSimulacao.RestauranteSemGarcom.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/EngineSimulacao.RestauranteSemGarcom/EngineSimulacao.RestauranteSemGarcom.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/EngineSimulacao.RestauranteSemGarcom/EngineSimulacao.RestauranteSemGarcom.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

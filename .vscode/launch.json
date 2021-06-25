@@ -8,7 +8,7 @@
             "name": "Restaurante Com Garcom",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "buildComGarcom",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/EngineSimulacao.Restaurante/bin/Debug/net6.0/EngineSimulacao.Restaurante.dll",
             "args": [],
@@ -17,6 +17,7 @@
             "console": "internalConsole",
             "stopAtEntry": false
         },
+        
         {
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
@@ -24,11 +25,27 @@
             "name": "Restaurante Sem Garcom",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "buildSemGarcom",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/EngineSimulacao.RestauranteSemGarcom/bin/Debug/net6.0/EngineSimulacao.RestauranteSemGarcom.dll",
             "args": [],
             "cwd": "${workspaceFolder}/EngineSimulacao.RestauranteSemGarcom",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }, 
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": "Motor Posto",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildMotorPosto",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/EngineSimulacao.ExemploPosto/bin/Debug/net6.0/EngineSimulacao.ExemploPosto.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/EngineSimulacao.ExemploPosto",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

@@ -22,6 +22,7 @@ namespace EngineSimulacao.Restaurante
         public static readonly ConjuntoEntidade<GrupoClientes> FilaMesa4Lugares = new("Fila Mesas de 4 Lugares");
 
         // ----- TEMPOS EM MINUTOS
+        public const string unidadeMedidaTempo = "min";
         public const double TempoMaximoChegadaClientes = 180.00;
         public const double TempoMaximoIdasAoBanheiro = TempoMaximoChegadaClientes * 15;
         public const double TempoPrimeiraIdaAoBanheiro = 180;
