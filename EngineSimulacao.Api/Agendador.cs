@@ -29,6 +29,15 @@ namespace EngineSimulacao.Api
                 callback?.Invoke();
             }
         }
+        public static void SimularPorDeterminadoTempo(double tempo, Action callback = null)
+        {
+            while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade) && prioridade < tempo)
+            {
+                Tempo = prioridade;
+                evento.Executar();
+                callback?.Invoke();
+            }
+        }
 
         private static void AgendarEvento(EventoGerenciado evento, double tempoSelecionado)
         {

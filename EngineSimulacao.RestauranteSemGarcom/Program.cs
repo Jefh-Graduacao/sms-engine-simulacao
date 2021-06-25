@@ -15,7 +15,12 @@ namespace EngineSimulacao.RestauranteSemGarcom
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
+            
+            //Simular Todo Sistema
             Agendador.Simular();
+
+            //Simular Por determinado tempo
+            //Agendador.SimularPorDeterminadoTempo(180);
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 

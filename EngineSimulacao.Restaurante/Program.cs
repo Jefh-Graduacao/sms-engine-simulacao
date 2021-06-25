@@ -15,7 +15,12 @@ namespace EngineSimulacao.Restaurante
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
+            
+            //Simular Todo Sistema
             Agendador.Simular(() => CallbackMotor(MotorRestaurante.Garcom));
+
+            //Simular Por determinado tempo
+            //Agendador.SimularPorDeterminadoTempo(180, () => CallbackMotor(MotorRestaurante.Garcom));
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 
