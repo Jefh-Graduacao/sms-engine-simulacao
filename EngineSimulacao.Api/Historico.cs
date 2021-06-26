@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EngineSimulacao.Api
 {
@@ -9,6 +10,7 @@ namespace EngineSimulacao.Api
         public abstract double menorTempoDeVida();
         public abstract double tempoMedioDeVida();
         public abstract double maiorTempoDeVida();
+        public abstract double desvioPadraoDeVida();
     }
 
     public class Historico<T> : HistoricoBase where T : notnull, Gerenciado
@@ -61,7 +63,7 @@ namespace EngineSimulacao.Api
 
         public override double tempoMedioDeVida()
         {
-            if (lista.Count == 0) 
+            if (lista.Count == 0)
                 return 0;
 
             double soma = 0;
@@ -72,6 +74,32 @@ namespace EngineSimulacao.Api
             }
             return soma / lista.Count;
         }
+
+        public override double desvioPadraoDeVida()
+        {
+            if (lista.Count == 0)
+                return 0;
+
+            List<double> temposDeVida = new List<double> {};
+
+            for (int i = 0; i < lista.Count; i++)
+            {
+                temposDeVida.Add(lista[i].TempoDeVida);
+            }
+
+            IEnumerable<double> sequence = temposDeVida;
+
+            double resultado = 0;
+
+            if (temposDeVida.Any())
+            {
+                double media = temposDeVida.Average();
+                double soma = temposDeVida.Sum(d => Math.Pow(d - media, 2));
+                resultado = Math.Sqrt((soma) / (temposDeVida.Count() - 1));
+            }
+            return resultado;
+        }
+
 
         public override double maiorTempoDeVida()
         {

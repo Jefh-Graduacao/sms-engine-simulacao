@@ -50,7 +50,7 @@ namespace EngineSimulacao.Api
         public double Exponencial(double média)
         {
             double x = ProximoComEscalaDe0a1();
-            double exponencial = Math.Pow(-média, -1) * Math.Log(1.0 - x);
+            double exponencial = -(Math.Log(1.0 - x))/média;
             if (exponencial > double.MaxValue)
                 return Exponencial(média);
             return exponencial;

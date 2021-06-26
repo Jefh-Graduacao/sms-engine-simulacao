@@ -3,7 +3,6 @@ using EngineSimulacao.RestauranteSemGarcom.Entidades;
 using EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EngineSimulacao.RestauranteSemGarcom
 {
@@ -15,12 +14,12 @@ namespace EngineSimulacao.RestauranteSemGarcom
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
-            
+
             //Simular Todo Sistema
             Agendador.Simular();
 
             //Simular Por determinado tempo
-            //Agendador.SimularPorDeterminadoTempo(180);
+            //Agendador.SimularPorDeterminadoTempo(500);
 
             List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
 
@@ -75,6 +74,16 @@ namespace EngineSimulacao.RestauranteSemGarcom
             var filaPedidosCozinha = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Pedidos Cozinha");
             var filaPedidosEntrega = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila de Pedidos para Entrega");
 
+           
+
+            // usado para validar modelo com sistema (Tamanho da Fila x Tempo do Modelo)
+            var coz = MotorRestaurante.FilaPedidosCozinha.HistoricoQuantidades;
+            var cx1 = MotorRestaurante.FilaCaixa1.HistoricoQuantidades;
+            var cx2 = MotorRestaurante.FilaCaixa2.HistoricoQuantidades;
+            var l1 = MotorRestaurante.FilaBalcao.HistoricoQuantidades;
+            var l2 = MotorRestaurante.FilaMesa2Lugares.HistoricoQuantidades;
+            var l4 = MotorRestaurante.FilaMesa4Lugares.HistoricoQuantidades;
+
             if (historicoChegadaClientes != null)
                 Console.WriteLine($"Chegaram {historicoChegadaClientes.lista.Count} clientes.");
 
@@ -97,14 +106,6 @@ namespace EngineSimulacao.RestauranteSemGarcom
             Console.WriteLine("");
         }
 
-        private static void ImprimirTempoNaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
-        {
-            var texto = $"Tempo médio dos {oQuePassaPelafila} na {nomeDaFila}";
-
-            if (hisGrupoClientes != null)
-                Console.WriteLine($"{texto} é de {hisGrupoClientes.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}.");
-        }
-
         private static void ImprimirPassouPelaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
         {
             var texto = $"{oQuePassaPelafila} passaram pela";
@@ -113,6 +114,17 @@ namespace EngineSimulacao.RestauranteSemGarcom
                 Console.WriteLine($"{hisGrupoClientes.lista.Count} {texto} {nomeDaFila}.");
         }
 
+        private static void ImprimirTempoNaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        {
+            var texto = $"Tempo médio dos {oQuePassaPelafila} na {nomeDaFila}";
+            
+            
+            if (hisGrupoClientes != null){
+                var desvio = $"Désvio médio: +/- {hisGrupoClientes.desvioPadraoDeVida().ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.";
+                Console.WriteLine($"{texto} é de {hisGrupoClientes.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}. {desvio}");
+            }
+                
+        }
 
     }
 }
