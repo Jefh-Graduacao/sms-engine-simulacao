@@ -3,6 +3,7 @@ using EngineSimulacao.RestauranteSemGarcom.Entidades;
 using EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace EngineSimulacao.RestauranteSemGarcom
 {
@@ -15,25 +16,105 @@ namespace EngineSimulacao.RestauranteSemGarcom
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
 
-            //Simular Todo Sistema
-            Agendador.Simular();
+            Console.Clear();
+            Console.WriteLine("################################################################");
+            Console.WriteLine("\nBem vindo ao nosso trabalho!");
+            ImprimirMenu();
 
-            //Simular Por determinado tempo
-            //Agendador.SimularPorDeterminadoTempo(500);
-
-            List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
-
-            foreach (var historico in listaHistorico)
+            string line;
+            string mensagem;
+            double tempo;
+            while ((line = Console.ReadLine()) != "8")
             {
-                Console.WriteLine("\n\n------------");
-                Console.WriteLine(historico.Nome + " maior tempo de vida " + historico.maiorTempoDeVida());
-                Console.WriteLine(historico.Nome + " menor tempo de vida " + historico.menorTempoDeVida());
-                Console.WriteLine(historico.Nome + " tempo médio de vida " + historico.tempoMedioDeVida());
-                Console.WriteLine("------------\n\n");
-            }
+                switch (line)
+                {
+                    case "1":
+                        //Simular Todo Sistema
+                        Agendador.Simular();
+                        break;
 
-            MostrarEstatisticasDeFilas();
-            MostrarEstatisticasDosRecursos();
+                    case "2":
+                        //Simular Até determinado tempo
+                        mensagem = $"Digite o tempo ({MotorRestaurante.unidadeMedidaTempo}) em que a simulação irá parar:";
+                        tempo = obterTempoInformadoPeloUsuario(mensagem);
+                        Agendador.SimularAtéDeterminadoTempo(tempo);
+                        break;
+
+                    case "3":
+                        //Simular Por determinado tempo
+                        mensagem = $"Digite por quanto tempo ({MotorRestaurante.unidadeMedidaTempo}) a simulação será executada3:";
+                        tempo = obterTempoInformadoPeloUsuario(mensagem);
+                        Agendador.SimularPorDeterminadoTempo(tempo);
+                        break;
+
+                    case "4":
+                        //Simular Passo a Passo (Um passo por vez)
+                        Agendador.SimularUmaExecucao();
+                        break;
+
+                    case "5":
+                        MostrarEstatisticasDeFilas();
+                        MostrarEstatisticasDosRecursos();
+                        break;
+                    case "6":
+                        foreach (var historico in ColetaDeDados.ListaDeHistoricos)
+                        {
+                            Console.WriteLine("\n\n------------");
+                            Console.WriteLine(historico.Nome + " maior tempo de vida " + historico.maiorTempoDeVida());
+                            Console.WriteLine(historico.Nome + " menor tempo de vida " + historico.menorTempoDeVida());
+                            Console.WriteLine(historico.Nome + " tempo médio de vida " + historico.tempoMedioDeVida());
+                            Console.WriteLine("------------\n\n");
+                        }
+                        break;
+                    case "7":
+                        //limpar console 
+                        Console.Clear();
+                        break;
+                    default:
+                        Console.WriteLine("Valor inválido, favor tente novamente.");
+                        break;
+                }
+                if (line != "8")
+                    ImprimirMenu();
+            }
+        }
+
+        private static void ImprimirMenu()
+        {
+            Console.WriteLine("\n################################################################");
+            Console.WriteLine($"\nTempo atual do Sistema: {Agendador.Tempo.ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.");
+            Console.WriteLine($"Quantidade de Eventos Futuros: {Agendador.TamanhoListaEventosFuturos}");
+            Console.WriteLine("\nDigite:\n");
+            Console.WriteLine("1 -> Simular todo o Sistema.");
+            Console.WriteLine("2 -> Simular até um tempo determinado.");
+            Console.WriteLine("3 -> Simular por um tempo determinado.");
+            Console.WriteLine("4 -> Simular um passo.");
+            Console.WriteLine("5 -> Mostrar estatisticas Atuais.");
+            Console.WriteLine("6 -> Mostrar historico completo.");
+            Console.WriteLine("7 -> Limpar Terminal.");
+            Console.WriteLine("8 -> Sair.");
+        }
+
+        private static double obterTempoInformadoPeloUsuario(string mensagem)
+        {
+            Console.WriteLine(mensagem);
+            string line;
+
+            while (true)
+            {
+                line = Console.ReadLine();
+                try
+                {
+                    double valor = Double.Parse(line);
+                    return valor;
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("Valor Invalido");
+                    Thread.Sleep(500);
+                    Console.WriteLine(mensagem);
+                }
+            }
         }
 
         private static void MostrarEstatisticasDosRecursos()
@@ -74,7 +155,6 @@ namespace EngineSimulacao.RestauranteSemGarcom
             var filaPedidosCozinha = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Pedidos Cozinha");
             var filaPedidosEntrega = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila de Pedidos para Entrega");
 
-           
 
             // usado para validar modelo com sistema (Tamanho da Fila x Tempo do Modelo)
             var coz = MotorRestaurante.FilaPedidosCozinha.HistoricoQuantidades;
@@ -85,7 +165,7 @@ namespace EngineSimulacao.RestauranteSemGarcom
             var l4 = MotorRestaurante.FilaMesa4Lugares.HistoricoQuantidades;
 
             if (historicoChegadaClientes != null)
-                Console.WriteLine($"Chegaram {historicoChegadaClientes.lista.Count} clientes.");
+                Console.WriteLine($"\nChegaram {historicoChegadaClientes.lista.Count} clientes.");
 
             ImprimirEstatisticaFila(historicoFilaCx1, "clientes", "fila 1");
             ImprimirEstatisticaFila(historicoFilaCx2, "clientes", "fila 2");
@@ -117,13 +197,14 @@ namespace EngineSimulacao.RestauranteSemGarcom
         private static void ImprimirTempoNaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
         {
             var texto = $"Tempo médio dos {oQuePassaPelafila} na {nomeDaFila}";
-            
-            
-            if (hisGrupoClientes != null){
+
+
+            if (hisGrupoClientes != null)
+            {
                 var desvio = $"Désvio médio: +/- {hisGrupoClientes.desvioPadraoDeVida().ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.";
                 Console.WriteLine($"{texto} é de {hisGrupoClientes.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}. {desvio}");
             }
-                
+
         }
 
     }

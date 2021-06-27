@@ -11,13 +11,17 @@ namespace EngineSimulacao.Api
         private static readonly PriorityQueue<EventoGerenciado, double> _listaEventosFuturos = new();
         public static double Tempo { get; private set; }
 
+        public static int TamanhoListaEventosFuturos => _listaEventosFuturos.Count;
+
         public static void SimularUmaExecucao(Action callback = null)
         {
-            _listaEventosFuturos.TryDequeue(out var evento, out var prioridade);
-
-            Tempo = prioridade;
-            evento.Executar();
-            callback?.Invoke();
+            if (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade))
+            {
+                ;
+                Tempo = prioridade;
+                evento.Executar();
+                callback?.Invoke();
+            }
         }
 
         public static void Simular(Action callback = null)
@@ -29,9 +33,20 @@ namespace EngineSimulacao.Api
                 callback?.Invoke();
             }
         }
-        public static void SimularPorDeterminadoTempo(double tempo, Action callback = null)
+        public static void SimularAtéDeterminadoTempo(double tempo, Action callback = null)
         {
             while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade) && prioridade < tempo)
+            {
+                Tempo = prioridade;
+                evento.Executar();
+                callback?.Invoke();
+            }
+        }
+
+        public static void SimularPorDeterminadoTempo(double tempo, Action callback = null)
+        {
+            double tempoFinal = tempo + Agendador.Tempo;
+            while (_listaEventosFuturos.TryDequeue(out var evento, out var prioridade) && prioridade < tempoFinal)
             {
                 Tempo = prioridade;
                 evento.Executar();
