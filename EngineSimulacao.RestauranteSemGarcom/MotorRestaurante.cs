@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using EngineSimulacao.Api;
+﻿using EngineSimulacao.Api;
 using EngineSimulacao.RestauranteSemGarcom.Entidades;
-using EngineSimulacao.RestauranteSemGarcom.Eventos.Caixas;
 using EngineSimulacao.RestauranteSemGarcom.Recursos;
 
 namespace EngineSimulacao.RestauranteSemGarcom

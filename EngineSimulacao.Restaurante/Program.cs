@@ -3,7 +3,7 @@ using EngineSimulacao.Restaurante.Entidades;
 using EngineSimulacao.Restaurante.Eventos.Clientes;
 using EngineSimulacao.Restaurante.Recursos;
 using System;
-using System.Collections.Generic;
+using System.Threading;
 
 namespace EngineSimulacao.Restaurante
 {
@@ -15,26 +15,10 @@ namespace EngineSimulacao.Restaurante
 
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
+
             
-            //Simular Todo Sistema
-            Agendador.Simular(() => CallbackMotor(MotorRestaurante.Garcom));
+            _executarMenu(() => CallbackMotor(MotorRestaurante.Garcom));
 
-            //Simular Por determinado tempo
-            //Agendador.SimularPorDeterminadoTempo(180, () => CallbackMotor(MotorRestaurante.Garcom));
-
-            List<HistoricoBase> listaHistorico = ColetaDeDados.ListaDeHistoricos;
-
-            foreach (var historico in listaHistorico)
-            {
-                Console.WriteLine("\n\n------------");
-                Console.WriteLine(historico.Nome + " maior tempo de vida " + historico.maiorTempoDeVida());
-                Console.WriteLine(historico.Nome + " menor tempo de vida " + historico.menorTempoDeVida());
-                Console.WriteLine(historico.Nome + " tempo médio de vida " + historico.tempoMedioDeVida());
-                Console.WriteLine("------------\n\n");
-            }
-
-            MostrarEstatisticasDeFilas();
-            MostrarEstatisticasDosRecursos();
         }
 
         private static void CallbackMotor(Garcom garcom)
@@ -42,7 +26,118 @@ namespace EngineSimulacao.Restaurante
             garcom.RedePetri.ExecutarCiclo();
         }
 
-        private static void MostrarEstatisticasDosRecursos()
+
+        #region METODOS PARA MENU
+
+        private static void _executarMenu(Action callback = null)
+        {
+            Console.Clear();
+            Console.WriteLine("################################################################");
+            Console.WriteLine("\nBem vindo ao nosso trabalho!");
+            _imprimirMenu();
+
+            string line;
+            string mensagem;
+            double tempo;
+            while ((line = Console.ReadLine()) != "7")
+            {
+                switch (line)
+                {
+                    case "":
+                        //Simular Passo a Passo (Um passo por vez)
+                        Agendador.SimularUmaExecucao(callback);
+                        break;
+
+                    case "1":
+                        //Simular Todo Sistema
+                        Agendador.Simular(callback);
+                        break;
+
+                    case "2":
+                        //Simular Até determinado tempo
+                        mensagem = $"Digite o tempo ({MotorRestaurante.unidadeMedidaTempo}) em que a simulação irá parar:";
+                        tempo = _obterTempoInformadoPeloUsuario(mensagem);
+                        Agendador.SimularAtéDeterminadoTempo(tempo, callback);
+                        break;
+
+                    case "3":
+                        //Simular Por determinado tempo
+                        mensagem = $"Digite por quanto tempo ({MotorRestaurante.unidadeMedidaTempo}) a simulação será executada:";
+                        tempo = _obterTempoInformadoPeloUsuario(mensagem);
+                        Agendador.SimularPorDeterminadoTempo(tempo, callback);
+                        break;
+
+                    case "4":
+                        _mostrarEstatisticasDeFilas();
+                        _mostrarEstatisticasDosRecursos();
+                        break;
+
+                    case "5":
+                        foreach (var historico in ColetaDeDados.ListaDeHistoricos)
+                        {
+                            Console.WriteLine("\n\n------------");
+                            Console.WriteLine(historico.Nome + " maior tempo de vida " + historico.maiorTempoDeVida());
+                            Console.WriteLine(historico.Nome + " menor tempo de vida " + historico.menorTempoDeVida());
+                            Console.WriteLine(historico.Nome + " tempo médio de vida " + historico.tempoMedioDeVida());
+                            Console.WriteLine("------------\n\n");
+                        }
+                        break;
+                    case "6":
+                        //limpar console 
+                        Console.Clear();
+                        break;
+                    default:
+                        Console.WriteLine("Valor inválido, favor tente novamente.");
+                        break;
+                }
+                if (line != "7")
+                    _imprimirMenu();
+            }
+        }
+        
+        private static void _imprimirMenu()
+        {
+            Console.WriteLine("\n################################################################");
+            Console.WriteLine($"\nTempo atual do Sistema: {Agendador.Tempo.ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.");
+            Console.WriteLine($"Quantidade de Eventos Futuros: {Agendador.TamanhoListaEventosFuturos}");
+            Console.WriteLine("\nDigite:\n");
+            Console.WriteLine("Vazio -> Simular um passo.");
+            Console.WriteLine("1 -> Simular todo o Sistema.");
+            Console.WriteLine("2 -> Simular até um tempo determinado.");
+            Console.WriteLine("3 -> Simular por um tempo determinado.");
+            Console.WriteLine("4 -> Mostrar estatisticas Atuais.");
+            Console.WriteLine("5 -> Mostrar historico completo.");
+            Console.WriteLine("6 -> Limpar Terminal.");
+            Console.WriteLine("7 -> Sair.");
+        }
+
+        private static double _obterTempoInformadoPeloUsuario(string mensagem)
+        {
+            Console.WriteLine(mensagem);
+            string line;
+
+            while (true)
+            {
+                line = Console.ReadLine();
+                try
+                {
+                    double valor = Double.Parse(line);
+                    return valor;
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("Valor Invalido");
+                    Thread.Sleep(500);
+                    Console.WriteLine(mensagem);
+                }
+            }
+        }
+
+        #endregion
+
+        #region METODOS ESTATISTICAS DO RECURSOS
+
+        private static void _mostrarEstatisticasDosRecursos()
         {
             var alocacaoRecursoBalcao = ColetaDeDados.GetHistoricoBase("Histórico AlocacaoGerenciada`1< BancoBalcao >");
             var alocacaoRecursoMesas2L = ColetaDeDados.GetHistoricoBase("Histórico AlocacaoGerenciada`1< Mesa2Lugares >");
@@ -51,73 +146,83 @@ namespace EngineSimulacao.Restaurante
             var alocacaoRecursoAtendenteCx2 = ColetaDeDados.GetHistoricoBase("Histórico AlocacaoGerenciada`1< AtendenteCaixa2 >");
             var alocacaoRecursoCozinheiro = ColetaDeDados.GetHistoricoBase("Histórico AlocacaoGerenciada`1< Cozinheiro >");
 
-            ImprimirEstatisticaRecursos(alocacaoRecursoBalcao, "Banco Balcao");
-            ImprimirEstatisticaRecursos(alocacaoRecursoMesas2L, "Mesas 2 Lugares");
-            ImprimirEstatisticaRecursos(alocacaoRecursoMesas4L, "Mesas 4 Lugares");
-            ImprimirEstatisticaRecursos(alocacaoRecursoAtendenteCx1, "Atendente Caixa 1");
-            ImprimirEstatisticaRecursos(alocacaoRecursoAtendenteCx2, "Atendente Caixa 2");
-            ImprimirEstatisticaRecursos(alocacaoRecursoCozinheiro, "Cozinheiro");
+            _imprimirEstatisticaRecursos(alocacaoRecursoBalcao, "Banco Balcao");
+            _imprimirEstatisticaRecursos(alocacaoRecursoMesas2L, "Mesas 2 Lugares");
+            _imprimirEstatisticaRecursos(alocacaoRecursoMesas4L, "Mesas 4 Lugares");
+            _imprimirEstatisticaRecursos(alocacaoRecursoAtendenteCx1, "Atendente Caixa 1");
+            _imprimirEstatisticaRecursos(alocacaoRecursoAtendenteCx2, "Atendente Caixa 2");
+            _imprimirEstatisticaRecursos(alocacaoRecursoCozinheiro, "Cozinheiro");
         }
 
-        private static void ImprimirEstatisticaRecursos(HistoricoBase x, string recursoNome)
+        private static void _imprimirEstatisticaRecursos(HistoricoBase x, string recursoNome)
         {
             if (x != null)
                 Console.WriteLine($"O tempo médio que o recurso {recursoNome} fica alocado é de "
                                 + $"{x.tempoMedioDeVida().ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.");
         }
 
-        private static void MostrarEstatisticasDeFilas()
+        #endregion
+
+        #region METODOS ESTATISTICAS DAS FILAS
+        private static void _mostrarEstatisticasDeFilas()
         {
             var historicoChegadaClientes = (Historico<ChegadaClientes>)ColetaDeDados.GetHistoricoBase("Histórico EventoGerenciado ChegadaClientes");
 
-            var historicoFilaCx1 = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Caixa 1");
-            var historicoFilaCx2 = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Caixa 2");
-
-            var bancoBalcao = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Balcão");
-            var mesas2L = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Mesas de 2 Lugares");
-            var mesas4L = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Mesas de 4 Lugares");
-
-            var filaPedidosCozinha = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Pedidos Cozinha");
-            var filaPedidosEntrega = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila de Pedidos para Entrega");
+            // usado para validar modelo com sistema (Tamanho da Fila x Tempo do Modelo)
+            var coz = MotorRestaurante.FilaPedidosCozinha.HistoricoQuantidades;
+            var cx1 = MotorRestaurante.FilaCaixa1.HistoricoQuantidades;
+            var cx2 = MotorRestaurante.FilaCaixa2.HistoricoQuantidades;
+            var l1 = MotorRestaurante.FilaBalcao.HistoricoQuantidades;
+            var l2 = MotorRestaurante.FilaMesa2Lugares.HistoricoQuantidades;
+            var l4 = MotorRestaurante.FilaMesa4Lugares.HistoricoQuantidades;
 
             if (historicoChegadaClientes != null)
-                Console.WriteLine($"Chegaram {historicoChegadaClientes.lista.Count} clientes.");
+                Console.WriteLine($"\nChegaram {historicoChegadaClientes.lista.Count} clientes.");
 
-            ImprimirEstatisticaFila(historicoFilaCx1, "clientes", "fila 1");
-            ImprimirEstatisticaFila(historicoFilaCx2, "clientes", "fila 2");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaCaixa1, "clientes");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaCaixa2, "clientes");
 
-            ImprimirEstatisticaFila(bancoBalcao, "clientes", "fila do balcão");
-            ImprimirEstatisticaFila(mesas2L, "clientes", "fila de mesas 2 lugares");
-            ImprimirEstatisticaFila(mesas4L, "clientes", "fila de mesas 4 lugares");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaBalcao, "clientes");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaMesa2Lugares, "clientes");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaMesa4Lugares, "clientes");
 
-            ImprimirEstatisticaFila(filaPedidosCozinha, "pedidos", "fila de pedidos para cozinha");
-            ImprimirEstatisticaFila(filaPedidosEntrega, "pedidos", "fila de pedidos para entrega");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaPedidosCozinha, "pedidos");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaEntrega, "pedidos");
 
         }
 
-        private static void ImprimirEstatisticaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        private static void _imprimirEstatisticaFila(ConjuntoEntidade<GrupoClientes> fila, string oQuePassaPelafila)
         {
-            ImprimirPassouPelaFila(hisGrupoClientes, oQuePassaPelafila, nomeDaFila);
-            ImprimirTempoNaFila(hisGrupoClientes, oQuePassaPelafila, nomeDaFila);
+            _imprimirPassouPelaFila(fila, oQuePassaPelafila);
+            _imprimirTempoNaFila(fila, oQuePassaPelafila);
             Console.WriteLine("");
         }
 
-        private static void ImprimirTempoNaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
-        {
-            var texto = $"Tempo médio dos {oQuePassaPelafila} na {nomeDaFila}";
-
-            if (hisGrupoClientes != null)
-                Console.WriteLine($"{texto} é de {hisGrupoClientes.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}.");
-        }
-
-        private static void ImprimirPassouPelaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        private static void _imprimirPassouPelaFila(ConjuntoEntidade<GrupoClientes> fila, string oQuePassaPelafila)
         {
             var texto = $"{oQuePassaPelafila} passaram pela";
 
-            if (hisGrupoClientes != null)
-                Console.WriteLine($"{hisGrupoClientes.lista.Count} {texto} {nomeDaFila}.");
+            if (fila.Historico != null){
+                Console.WriteLine($"{fila.Historico.lista.Count} {texto} {fila.Nome.ToLower()}.");
+                Console.WriteLine($"Tamanho atual da {fila.Nome.ToLower()}: {fila.TamanhoAtual}.");
+            }
         }
 
+        private static void _imprimirTempoNaFila(ConjuntoEntidade<GrupoClientes> fila, string oQuePassaPelafila)
+        {
+            var texto = $"Tempo médio dos {oQuePassaPelafila} na {fila.Nome.ToLower()}";
 
+
+            if (fila.Historico != null)
+            {
+                var desvio = $"Désvio médio: +/- {fila.Historico.desvioPadraoDeVida().ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.";
+                Console.WriteLine($"{texto} é de {fila.Historico.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}. {desvio}");
+            }
+
+        }
+
+        #endregion       
+
+  
     }
 }
