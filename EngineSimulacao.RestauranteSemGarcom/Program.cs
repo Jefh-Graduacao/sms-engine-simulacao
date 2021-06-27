@@ -145,17 +145,6 @@ namespace EngineSimulacao.RestauranteSemGarcom
         {
             var historicoChegadaClientes = (Historico<ChegadaClientes>)ColetaDeDados.GetHistoricoBase("Histórico EventoGerenciado ChegadaClientes");
 
-            var historicoFilaCx1 = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Caixa 1");
-            var historicoFilaCx2 = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Caixa 2");
-
-            var bancoBalcao = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Balcão");
-            var mesas2L = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Mesas de 2 Lugares");
-            var mesas4L = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Mesas de 4 Lugares");
-
-            var filaPedidosCozinha = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila Pedidos Cozinha");
-            var filaPedidosEntrega = (Historico<GrupoClientes>)ColetaDeDados.GetHistoricoBase("Histórico ConjuntoEntidade Fila de Pedidos para Entrega");
-
-
             // usado para validar modelo com sistema (Tamanho da Fila x Tempo do Modelo)
             var coz = MotorRestaurante.FilaPedidosCozinha.HistoricoQuantidades;
             var cx1 = MotorRestaurante.FilaCaixa1.HistoricoQuantidades;
@@ -167,42 +156,41 @@ namespace EngineSimulacao.RestauranteSemGarcom
             if (historicoChegadaClientes != null)
                 Console.WriteLine($"\nChegaram {historicoChegadaClientes.lista.Count} clientes.");
 
-            ImprimirEstatisticaFila(historicoFilaCx1, "clientes", "fila 1");
-            ImprimirEstatisticaFila(historicoFilaCx2, "clientes", "fila 2");
+            ImprimirEstatisticaFila(MotorRestaurante.FilaCaixa1, "clientes");
+            ImprimirEstatisticaFila(MotorRestaurante.FilaCaixa2, "clientes");
 
-            ImprimirEstatisticaFila(bancoBalcao, "clientes", "fila do balcão");
-            ImprimirEstatisticaFila(mesas2L, "clientes", "fila de mesas 2 lugares");
-            ImprimirEstatisticaFila(mesas4L, "clientes", "fila de mesas 4 lugares");
+            ImprimirEstatisticaFila(MotorRestaurante.FilaBalcao, "clientes");
+            ImprimirEstatisticaFila(MotorRestaurante.FilaMesa2Lugares, "clientes");
+            ImprimirEstatisticaFila(MotorRestaurante.FilaMesa4Lugares, "clientes");
 
-            ImprimirEstatisticaFila(filaPedidosCozinha, "pedidos", "fila de pedidos para cozinha");
-            ImprimirEstatisticaFila(filaPedidosEntrega, "pedidos", "fila de pedidos para entrega");
+            ImprimirEstatisticaFila(MotorRestaurante.FilaPedidosCozinha, "pedidos");
 
         }
 
-        private static void ImprimirEstatisticaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        private static void ImprimirEstatisticaFila(ConjuntoEntidade<GrupoClientes> fila, string oQuePassaPelafila)
         {
-            ImprimirPassouPelaFila(hisGrupoClientes, oQuePassaPelafila, nomeDaFila);
-            ImprimirTempoNaFila(hisGrupoClientes, oQuePassaPelafila, nomeDaFila);
+            ImprimirPassouPelaFila(fila, oQuePassaPelafila);
+            ImprimirTempoNaFila(fila, oQuePassaPelafila);
             Console.WriteLine("");
         }
 
-        private static void ImprimirPassouPelaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        private static void ImprimirPassouPelaFila(ConjuntoEntidade<GrupoClientes> fila, string oQuePassaPelafila)
         {
             var texto = $"{oQuePassaPelafila} passaram pela";
 
-            if (hisGrupoClientes != null)
-                Console.WriteLine($"{hisGrupoClientes.lista.Count} {texto} {nomeDaFila}.");
+            if (fila.Historico != null)
+                Console.WriteLine($"{fila.Historico.lista.Count} {texto} {fila.Nome.ToLower()}.");
         }
 
-        private static void ImprimirTempoNaFila(Historico<GrupoClientes> hisGrupoClientes, string oQuePassaPelafila, string nomeDaFila)
+        private static void ImprimirTempoNaFila(ConjuntoEntidade<GrupoClientes> fila, string oQuePassaPelafila)
         {
-            var texto = $"Tempo médio dos {oQuePassaPelafila} na {nomeDaFila}";
+            var texto = $"Tempo médio dos {oQuePassaPelafila} na {fila.Nome.ToLower()}";
 
 
-            if (hisGrupoClientes != null)
+            if (fila.Historico != null)
             {
-                var desvio = $"Désvio médio: +/- {hisGrupoClientes.desvioPadraoDeVida().ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.";
-                Console.WriteLine($"{texto} é de {hisGrupoClientes.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}. {desvio}");
+                var desvio = $"Désvio médio: +/- {fila.Historico.desvioPadraoDeVida().ToString("N4")} {MotorRestaurante.unidadeMedidaTempo}.";
+                Console.WriteLine($"{texto} é de {fila.Historico.tempoMedioDeVida().ToString("N4")}  {MotorRestaurante.unidadeMedidaTempo}. {desvio}");
             }
 
         }
