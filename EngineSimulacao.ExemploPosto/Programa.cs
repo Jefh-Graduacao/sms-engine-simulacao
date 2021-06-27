@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace EngineSimulacao.ExemploPosto
 {
-    public static class Program
+    public static class Programa
     {
         public static void Main(string[] args)
         {

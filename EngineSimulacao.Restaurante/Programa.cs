@@ -1,12 +1,13 @@
 ﻿using EngineSimulacao.Api;
-using EngineSimulacao.RestauranteSemGarcom.Entidades;
-using EngineSimulacao.RestauranteSemGarcom.Eventos.Clientes;
+using EngineSimulacao.Restaurante.Entidades;
+using EngineSimulacao.Restaurante.Eventos.Clientes;
+using EngineSimulacao.Restaurante.Recursos;
 using System;
 using System.Threading;
 
-namespace EngineSimulacao.RestauranteSemGarcom
+namespace EngineSimulacao.Restaurante
 {
-    public static class Program
+    public static class Programa
     {
         public static void Main(string[] args)
         {
@@ -15,8 +16,16 @@ namespace EngineSimulacao.RestauranteSemGarcom
             var evento = new ChegadaClientes();
             Agendador.AgendarAgora(evento);
 
-            _executarMenu();
+            
+            _executarMenu(() => CallbackMotor(MotorRestaurante.Garcom));
+
         }
+
+        private static void CallbackMotor(Garcom garcom)
+        {
+            garcom.RedePetri.ExecutarCiclo();
+        }
+
 
         #region METODOS PARA MENU
 
@@ -178,6 +187,7 @@ namespace EngineSimulacao.RestauranteSemGarcom
             _imprimirEstatisticaFila(MotorRestaurante.FilaMesa4Lugares, "clientes");
 
             _imprimirEstatisticaFila(MotorRestaurante.FilaPedidosCozinha, "pedidos");
+            _imprimirEstatisticaFila(MotorRestaurante.FilaEntrega, "pedidos");
 
         }
 
@@ -213,5 +223,6 @@ namespace EngineSimulacao.RestauranteSemGarcom
 
         #endregion       
 
+  
     }
 }
