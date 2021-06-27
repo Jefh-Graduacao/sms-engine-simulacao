@@ -1,5 +1,8 @@
 Trabalho GB para a cadeira de Simulação e Modelagem de Sistemas, feito com C# e dotnet.
 
+## Versão do Framework .dotNet
+- 6.0.100-preview.4.21255.9
+
 ## Executar
 - Pelo terminal:
     - Para exeucutar Restaurante Sem Garçom
